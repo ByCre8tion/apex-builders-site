@@ -201,3 +201,6 @@ cite{display:block;margin-top:12px;font-family:var(--body);font-style:normal;fon
 @keyframes vt-out{to{opacity:0;transform:translateY(-28px)}}
 @keyframes vt-in{from{opacity:.4;transform:translateY(48px);clip-path:inset(100% 0 0 0)}to{opacity:1;transform:none;clip-path:inset(0)}}
 @media (prefers-reduced-motion:reduce){::view-transition-old(*),::view-transition-new(*),::view-transition-group(*){animation:none!important}}
+.form-submit{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+.contact-lines .socials{margin-block:8px}
+.footer .socials{flex-direction:row;gap:8px}

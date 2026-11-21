@@ -1,0 +1,22 @@
+---
+import { socials } from '../data/socials';
+const { tone = 'light', label = 'Apex Builders on social media' } = Astro.props as { tone?: 'light' | 'dark'; label?: string };
+---
+<ul class:list={['socials', tone]} aria-label={label}>
+  {socials.map((s) => (
+    <li><a href={s.href || '#'} target={s.href ? '_blank' : undefined} rel={s.href ? 'noopener' : undefined} aria-label={`${s.label}${s.href ? ' (opens in a new tab)' : ''}`} data-todo={s.href ? undefined : 'link'}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.path} fill="currentColor" /></svg>
+    </a></li>
+  ))}
+</ul>
+<style is:global>
+.socials{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.socials a{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--rule-strong);color:var(--ink);transition:background-color .2s ease-out,border-color .2s ease-out,color .2s ease-out}
+.socials svg{width:18px;height:18px}
+.socials.dark a{border-color:rgba(245,238,233,.18);color:var(--plaster)}
+@media (hover:hover){
+  .socials a:hover{background:var(--ink);border-color:var(--ink);color:var(--white)}
+  .socials.dark a:hover{background:var(--orange);border-color:var(--orange);color:var(--ink)}
+}
+.socials a:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+</style>

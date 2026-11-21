@@ -5,6 +5,8 @@ import Ph from '../components/Ph.astro';
 import Label from '../components/Label.astro';
 import Process from '../components/Process.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Socials from '../components/Socials.astro';
+import BbbSeal from '../components/BbbSeal.astro';
 import { values, contact } from '../data/site';
 ---
 <Base title="About | Apex Builders" description="Jason started at eight years old on his father's job sites. Apex Builders builds the way he was taught." current="about.html">
@@ -16,6 +18,7 @@ import { values, contact } from '../data/site';
         <p class="lead" data-edit="ab-lead">Jason started at eight years old, handing tools to his father and grandfather in Colorado. He moved to Arizona in 2008, built and sold his first construction company, then started Apex to build the way he was taught: every detail counts.</p>
         <p data-edit="ab-p2">[A second paragraph in Jason's words: what he learned from his family, why he started Apex in 2016 and what he wants every client to feel at the final walkthrough.]</p>
         <blockquote><span data-edit="ab-quote">We aren’t perfect. How you handle a mistake and make it right is what defines a company.</span><cite data-edit="ab-cite">Jason, owner and founder</cite></blockquote>
+        <div class="story-social"><span>Follow the work</span><Socials /></div>
       </div>
     </div>
   </section>
@@ -38,7 +41,7 @@ import { values, contact } from '../data/site';
   </section>
   <Process />
   <section class="license" aria-label="License">
-    <div class="wrap lic-in"><span class="label"><b>ROC</b>#{contact.roc}</span><p data-edit="lic-p">Licensed, bonded and insured in Arizona. Building and renovating homes here since 2016, and in the trade since 2008.</p></div>
+    <div class="wrap lic-in"><span class="label"><b>ROC</b>#{contact.roc}</span><p data-edit="lic-p">Licensed, bonded and insured in Arizona. Building and renovating homes here since 2016, and in the trade since 2008.</p><BbbSeal /></div>
   </section>
   <CtaBand edit="ab-cta" />
 </Base>
@@ -47,11 +50,12 @@ import { values, contact } from '../data/site';
 .story-ph{aspect-ratio:4/5}
 .story-copy{display:flex;flex-direction:column;gap:24px;max-width:58ch}
 .story-copy p:not(.lead){color:var(--ink-2)}
+.story-social{display:flex;flex-direction:column;gap:12px;font-size:0.875rem;font-weight:600;color:var(--ink)}
 .team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:clamp(180px,20vw,300px);gap:12px}
 .t-1{grid-column:span 2;grid-row:span 2}
 .t-2{grid-column:span 2}
 .license{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.lic-in{display:flex;flex-wrap:wrap;gap:16px 48px;align-items:baseline;padding-block:36px}
+.lic-in{display:flex;flex-wrap:wrap;gap:16px 48px;align-items:center;padding-block:36px}
 .lic-in p{color:var(--ink-2);max-width:60ch}
 @media (max-width:900px){
   .story-grid,.values{grid-template-columns:minmax(0,1fr)}

@@ -1,0 +1,15 @@
+---
+/* Slot for the official BBB Accredited Business seal. Paste the seal code from Jason's BBB account
+   in place of the placeholder once Apex is accredited; BBB's seal must come from them, not be redrawn. */
+const { tone = 'light' } = Astro.props as { tone?: 'light' | 'dark' };
+---
+<div class:list={['bbb', tone]} data-bbb-seal>
+  <span class="bbb-ph"><b>BBB seal</b><span>Official accredited seal goes here</span></span>
+</div>
+<style is:global>
+.bbb{display:inline-flex}
+.bbb-ph{display:flex;flex-direction:column;justify-content:center;width:168px;height:60px;padding:0 14px;border:1px dashed var(--rule-strong);border-radius:var(--r-btn);font-size:0.6875rem;line-height:1.35;color:var(--muted)}
+.bbb-ph b{font-size:0.8125rem;color:var(--ink)}
+.bbb.dark .bbb-ph{border-color:rgba(245,238,233,.3);color:#A9ADAE}
+.bbb.dark .bbb-ph b{color:var(--plaster)}
+</style>

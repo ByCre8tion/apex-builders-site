@@ -1,46 +1,61 @@
 ---
-/* Quiet proof line right under the hero. Rating comes from reviews.json, so it updates with the real Google numbers. */
+/* Proof band under the hero, numbers first. Rating comes from reviews.json, so it updates with the real Google numbers. */
 import { contact, cities } from '../data/site';
 import reviews from '../data/reviews.json';
 const star = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.8l2.5 5.3 5.8.7-4.3 4 1.1 5.7L10 14.7l-5.1 2.8 1.1-5.7-4.3-4 5.8-.7z" fill="currentColor"/></svg>';
-const items = [
-  { icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m9 12 2 2 4-4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>', t: 'Licensed, bonded, insured', s: `ROC #${contact.roc}` },
-  { icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10l8-6 8 6v10h-5v-6H9v6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>', t: 'Building since 2016', s: 'In the trade since 2008' },
-  { icon: '', stars: true, t: `${reviews.rating.toFixed(1)} on Google`, s: `${reviews.total} reviews`, href: '#reviews' },
-  { icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.25" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>', t: 'Serving the Valley', s: `${cities.length} cities and beyond` },
-];
+const g = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+const shield = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8 19.5 6v5.6c0 4.6-3.1 8.4-7.5 9.9-4.4-1.5-7.5-5.3-7.5-9.9V6z" fill="currentColor"/><path d="m8.6 12.1 2.4 2.4 4.4-4.9" fill="none" stroke="#191C1D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 ---
-<section class="trust" aria-label="Why homeowners trust Apex">
+<section class="trust on-dark" aria-label="Why homeowners trust Apex">
   <ul class="wrap trust-row">
-    {items.map((it) => {
-      const inner = <><span class="trust-ico">{it.stars ? <span class="trust-stars" set:html={star.repeat(5)} /> : <Fragment set:html={it.icon} />}</span><span class="trust-txt"><b>{it.t}</b><span>{it.s}</span></span></>;
-      return <li data-reveal>{it.href ? <a href={it.href}>{inner}</a> : <div>{inner}</div>}</li>;
-    })}
+    <li data-reveal>
+      <span class="t-num"><span data-count="2016" data-from="1996">2016</span></span>
+      <span class="t-cap"><b>Building in the Valley</b>In the trade since 2008</span>
+    </li>
+    <li data-reveal>
+      <a class="t-g-link" href="#reviews">
+        <span class="t-num"><span class="t-g" set:html={g} />{reviews.rating.toFixed(1)}<span class="t-stars" set:html={star.repeat(5)} /></span>
+        <span class="t-cap"><b>Google rating</b><span>{reviews.total} reviews <span class="t-arr" aria-hidden="true">→</span></span></span>
+      </a>
+    </li>
+    <li data-reveal>
+      <span class="t-num"><span data-count={cities.length}>{cities.length}</span><small>cities</small></span>
+      <span class="t-cap"><b>Served across the Valley</b>And 100+ miles for the right job</span>
+    </li>
+    <li data-reveal>
+      <span class="t-num"><span class="t-shield" set:html={shield} />ROC</span>
+      <span class="t-cap"><b>Licensed, bonded, insured</b>#{contact.roc}</span>
+    </li>
   </ul>
 </section>
 <style is:global>
-.trust{background:var(--white);border-bottom:1px solid var(--rule)}
+.trust{background:var(--ink);color:var(--plaster)}
 .trust-row{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-block:0;padding-block:0}
-.trust-row li{border-left:1px solid var(--rule)}
-.trust-row li:first-child{border-left:0}
-.trust-row li>*{display:flex;align-items:center;gap:14px;padding:26px 24px;height:100%}
-.trust-row li:first-child>*{padding-left:0}
-.trust-ico{flex:none;display:grid;place-items:center;color:var(--ember)}
-.trust-ico>svg{width:26px;height:26px}
-.trust-stars{display:flex;gap:1px;color:#F4B400}
-.trust-stars svg{width:14px;height:14px}
-.trust-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
-.trust-txt b{font-size:0.9375rem;font-weight:600;color:var(--ink)}
-.trust-txt span{font-size:0.8125rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.trust-row a .trust-txt b{text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px;transition:text-decoration-color .2s ease-out}
-@media (hover:hover){.trust-row a:hover .trust-txt b{text-decoration-color:currentColor}}
+.trust-row li{display:flex;flex-direction:column;gap:14px;padding:clamp(28px,3vw,40px) clamp(20px,2.4vw,36px);border-left:1px solid rgba(245,238,233,.12);min-width:0}
+.trust-row li:first-child{border-left:0;padding-left:0}
+.t-g-link{display:flex;flex-direction:column;gap:14px}
+.t-num{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:clamp(2.25rem,3.4vw,3.25rem);line-height:.9;color:var(--white);font-variant-numeric:tabular-nums}
+.t-num small{font-size:.42em;font-weight:600;letter-spacing:.02em;color:var(--plaster-2);align-self:flex-end;margin-bottom:.2em;text-transform:none}
+.t-g{flex:none;display:grid;place-items:center;width:1em;height:1em;border-radius:50%;background:var(--white)}
+.t-g svg{width:.56em;height:.56em}
+.t-stars{display:flex;gap:2px;color:#F4B400;align-self:center}
+.t-stars svg{width:15px;height:15px}
+.t-shield{flex:none;display:grid;place-items:center;color:var(--orange)}
+.t-shield svg{width:.8em;height:.8em}
+.t-cap{display:flex;flex-direction:column;gap:2px;font-size:0.875rem;color:#A9ADAE}
+.t-cap b{font-size:0.9375rem;font-weight:600;color:var(--plaster)}
+.t-arr{display:inline-block;transition:transform .2s ease-out}
+@media (hover:hover){.t-g-link:hover .t-arr{transform:translateX(3px)} .t-g-link:hover .t-cap b{color:var(--orange)}}
+.t-g-link:focus-visible{outline:2px solid var(--orange);outline-offset:4px}
 @media (max-width:1000px){
   .trust-row{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .trust-row li:nth-child(3){border-left:0}
-  .trust-row li:nth-child(3)>*{padding-left:0}
-  .trust-row li:nth-child(n+3){border-top:1px solid var(--rule)}
+  .trust-row li:nth-child(3){border-left:0;padding-left:0}
+  .trust-row li:nth-child(n+3){border-top:1px solid rgba(245,238,233,.12)}
 }
 @media (max-width:640px){
-  .trust-row li>*{flex-direction:column;align-items:flex-start;gap:10px;padding:20px 16px}
+  .trust-row li{padding:24px 0 24px 16px}
+  .trust-row li:nth-child(odd){padding-left:0;padding-right:12px}
+  .t-num{font-size:2rem;gap:8px}
+  .t-stars{display:none}
 }
 </style>

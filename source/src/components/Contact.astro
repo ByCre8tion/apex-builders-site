@@ -1,5 +1,7 @@
 ---
 import Ph from './Ph.astro';
+import Socials from './Socials.astro';
+import BbbSeal from './BbbSeal.astro';
 import Label from './Label.astro';
 import Drawing from './Drawing.astro';
 import { contact, projectTypes, budgets, sources } from '../data/site';
@@ -16,6 +18,7 @@ const { n = '09', heading = 'Let’s talk about your project' } = Astro.props as
         <div class="contact-lines" data-reveal>
           <a href={`mailto:${contact.email}`}>{contact.email}</a>
           <span>{contact.address}</span>
+          <Socials />
           <small>Or comment BUILD on Instagram <a href={`https://www.instagram.com/${contact.instagram}/`} target="_blank" rel="noopener">@{contact.instagram}<span class="sr-only"> (opens in a new tab)</span></a></small>
         </div>
       </div>
@@ -37,7 +40,7 @@ const { n = '09', heading = 'Let’s talk about your project' } = Astro.props as
         <div class="field"><label for="f-source">How did you hear about us?</label><select id="f-source" name="source"><option value="">Choose one</option>{sources.map((t) => <option>{t}</option>)}</select></div>
         <div class="field"><label for="f-msg">Tell us about it</label><textarea id="f-msg" name="msg" rows="3" placeholder="Rooms, goals, timing"></textarea></div>
         <input type="hidden" name="utm_source" /><input type="hidden" name="utm_campaign" /><input type="hidden" name="lead_source_tag" />
-        <button class="btn btn-primary" type="submit">Get a quote <span class="arr" aria-hidden="true">→</span></button>
+        <div class="form-submit"><button class="btn btn-primary" type="submit">Get a quote <span class="arr" aria-hidden="true">→</span></button><BbbSeal /></div>
         <p class="form-note">We will call you to set up a site walk.</p>
       </div>
       <div class="form-done" id="formDone" hidden>
