@@ -43,8 +43,8 @@ function renderMedia(slot, m) {
 
 export function applyContent(c) {
   loaded = { text: { ...(c.text || {}) }, media: { ...(c.media || {}) } };
-  texts().forEach((el) => { orig[el.dataset.edit] = clean(el); });
-  Object.entries(c.text || {}).forEach(([k, h]) => { const el = $(`[data-edit="${k}"]`); if (el && typeof h === 'string') { el.innerHTML = h; state.text[k] = h; } });
+  texts().forEach((el) => { orig[el.dataset.edit] = el.id === 'statement' && el.dataset.src ? el.dataset.src : clean(el); });
+  Object.entries(c.text || {}).forEach(([k, h]) => { const el = $(`[data-edit="${k}"]`); if (el && typeof h === 'string') { if (el.id === 'statement' && window.__resplitStatement) window.__resplitStatement(h); else el.innerHTML = h; state.text[k] = h; } });
   Object.entries(c.media || {}).forEach(([k, m]) => {
     const key = m.slot || k, slot = $(`.ph[data-slot="${key}"]`); if (!slot) return;
     state.media[key] = { id: m.id, kind: m.kind, slot: key, ...(m.file ? { file: m.file } : {}) };
@@ -56,7 +56,7 @@ export function applyContent(c) {
 
 export async function loadContent() {
   try {
-    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 2500);
+    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 1200);
     const r = await fetch('content.json', { signal: ctl.signal, cache: 'no-store' });
     clearTimeout(tm);
     if (r.ok) return await r.json();
@@ -120,7 +120,7 @@ export async function initEditor() {
     if (on) {
       const st = $('#statement');
       if (window.__stTween) { window.__stTween.scrollTrigger?.kill(); window.__stTween.kill(); window.__stTween = null; }
-      if (st.dataset.src && $('.w', st)) st.innerHTML = state.text.statement ?? st.dataset.src;
+      if (st && st.dataset.src && $('.w', st)) st.innerHTML = state.text.statement ?? st.dataset.src;
       if (assets) addUploaders();
       say(dirty ? 'Unsaved changes' : 'Click any text to edit it. Use the buttons on each frame for photos and video.');
     } else say(dirty ? 'Unsaved changes' : 'Saved');

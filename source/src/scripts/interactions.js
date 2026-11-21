@@ -71,6 +71,8 @@ export function initInteractions() {
 
   initVideos();
   initCarousel();
+  const rvRows = $('#rvRows'), rvBtn = $('#rvToggle');
+  if (rvRows && rvBtn) rvBtn.addEventListener('click', () => { const p = rvRows.classList.toggle('paused'); rvBtn.setAttribute('aria-pressed', p); rvBtn.textContent = p ? 'Play' : 'Pause'; });
   initWidgets();
   initFilters();
   initViewer();

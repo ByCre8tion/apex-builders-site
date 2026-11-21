@@ -16,6 +16,7 @@ const site = 'https://bycre8tion.github.io/apex-builders-site/';
   <meta name="description" content={description} />
   <meta name="robots" content="noindex" />
   <meta name="theme-color" content="#FFFFFF" />
+  <script is:inline>(function(d){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;d.classList.add('motion');setTimeout(function(){if(!d.classList.contains('motion-ready'))d.classList.remove('motion')},4000)})(document.documentElement)</script>
   <link rel="icon" type="image/png" href="brand/favicon-32.png" />
   <link rel="apple-touch-icon" href="brand/favicon-180.png" />
   <meta property="og:type" content="website" />
@@ -38,7 +39,8 @@ const site = 'https://bycre8tion.github.io/apex-builders-site/';
     import { initInteractions } from '../scripts/interactions.js';
     import { initMotion } from '../scripts/motion.js';
     import { loadContent, applyContent, initEditor } from '../scripts/editor.js';
-    loadContent().then((c) => { applyContent(c); initInteractions(); initMotion(); initEditor(); });
+    initInteractions(); initMotion();
+    loadContent().then((c) => { applyContent(c); initEditor(); });
   </script>
 </body>
 </html>
