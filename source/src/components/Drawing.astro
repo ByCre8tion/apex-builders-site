@@ -1,0 +1,5 @@
+---
+interface Props { n: 1 | 2 | 3; class?: string; }
+const { n, class: cls = '' } = Astro.props;
+---
+<div class:list={['bg-draw', cls]} aria-hidden="true"><img src={`bg/house-${n}.webp`} alt="" loading="lazy" decoding="async" width="2000" height="1059" /></div>

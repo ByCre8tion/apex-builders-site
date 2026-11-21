@@ -1,0 +1,47 @@
+---
+import Ph from './Ph.astro';
+import Label from './Label.astro';
+import { projects } from '../data/site';
+---
+<section class="projects section" id="projects" aria-labelledby="proj-h">
+  <div class="wrap">
+    <div class="head" data-reveal><Label n="03" text="Selected projects" /><h2 id="proj-h" data-edit="proj-title">Recent work</h2></div>
+    <div class="stack" id="stack">
+      {projects.map((p, i) => (
+        <article class="card">
+          <div class="card-inner">
+            <Ph slot={p.slot} parallax alt={p.alt} label={p.alt} spec="16:9 or wider" />
+            <div class="card-info">
+              <h3 data-edit={`proj-${i}-t`}>{p.title}</h3>
+              <dl><dt>Location</dt><dd data-edit={`proj-${i}-c`}>{p.city}</dd></dl>
+              <dl><dt>Scope</dt><dd data-edit={`proj-${i}-s`}>{p.scope}</dd></dl>
+              <a class="btn btn-outline" href="#contact">Plan one like it <span class="arr" aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+<style is:global>
+.projects{padding-bottom:clamp(48px,6vw,96px)}
+.stack{display:flex;flex-direction:column;gap:36vh}
+.card{position:sticky;top:calc(96px + env(safe-area-inset-top,0px));height:min(74svh,720px);min-height:500px}
+.card-inner{height:100%;display:flex;flex-direction:column;background:var(--white);transform-origin:50% 0}
+.card .ph{flex:1;min-height:0}
+.card-info{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr) auto;align-items:center;gap:16px 28px;padding:22px 2px 20px;border-bottom:1px solid var(--rule)}
+.card-info h3{font-size:clamp(1.75rem,3vw,2.875rem)}
+.card-info dl{margin:0}
+.card-info dt{font-size:0.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.card-info dd{margin:4px 0 0;font-weight:500}
+@media (max-width:1100px){
+  .card-info{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .card-info h3{grid-column:1/-1}
+  .card-info .btn{grid-column:1/-1;justify-self:start}
+}
+@media (max-width:900px){
+  .stack{gap:64px}
+  .card{position:relative;top:auto;height:auto;min-height:0}
+  .card .ph{flex:none;aspect-ratio:4/3}
+}
+</style>

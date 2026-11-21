@@ -1,0 +1,30 @@
+---
+import Ph from './Ph.astro';
+import Label from './Label.astro';
+---
+<section class="founder section" id="about" aria-labelledby="about-h">
+  <div class="wrap founder-grid">
+    <Ph slot="portrait" class="portrait" parallax alt="Jason, owner and founder of Apex Builders" label="Portrait of Jason on an active job site" spec="4:5" />
+    <div class="founder-copy">
+      <Label n="06" text="About" />
+      <h2 id="about-h" data-reveal data-edit="about-title">Raised on the jobsite</h2>
+      <p class="lead" data-reveal data-edit="about-lead">Jason started at eight years old, handing tools to his father and grandfather in Colorado. He moved to Arizona in 2008, built and sold his first construction company, then started Apex to build the way he was taught: every detail counts.</p>
+      <blockquote data-reveal><span data-edit="about-quote">We aren’t perfect. How you handle a mistake and make it right is what defines a company.</span><cite data-edit="about-cite">Jason, owner and founder</cite></blockquote>
+      <div class="mosaic" data-reveal>
+        <Ph slot="mosaic-crew" alt="The Apex crew" label="Apex crew group photo" />
+        <Ph slot="mosaic-detail" alt="" label="Finish carpentry close up" />
+        <Ph slot="mosaic-team" alt="The Apex team together" label="Team get together" />
+      </div>
+    </div>
+  </div>
+</section>
+<style is:global>
+.founder-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,5vw,96px);align-items:stretch}
+.portrait{min-height:560px}
+.founder-copy{display:flex;flex-direction:column;gap:28px}
+blockquote{margin:0;padding-left:22px;border-left:2px solid var(--orange);font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,2.2vw,2rem);line-height:1.2;max-width:26ch}
+cite{display:block;margin-top:12px;font-family:var(--body);font-style:normal;font-size:0.875rem;font-weight:400;color:var(--muted)}
+.mosaic{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:200px 200px;gap:12px;margin-top:auto}
+.mosaic .ph:first-child{grid-row:span 2}
+@media (max-width:900px){ .founder-grid{grid-template-columns:minmax(0,1fr)} .portrait{min-height:0;aspect-ratio:4/5} .mosaic{grid-template-rows:150px 150px} }
+</style>

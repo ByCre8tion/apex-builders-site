@@ -1,0 +1,26 @@
+---
+import { cities } from '../data/site';
+const row = [...cities];
+---
+<section class="areas" aria-labelledby="areas-h">
+  <div class="wrap areas-head">
+    <h2 id="areas-h" data-edit="areas-title">Building across the Valley</h2>
+    <div class="areas-meta"><p data-edit="areas-p">18 cities, and 100+ miles for the right project.</p><button type="button" class="mq-toggle" id="mqToggle" aria-pressed="false" hidden>Pause</button></div>
+    <p class="sr-only">{cities.join(', ')}.</p>
+  </div>
+  <div class="marquee" id="marquee" aria-hidden="true">
+    <ul>{row.map((c) => <><li>{c}</li><li class="mk"><img src="brand/logo.svg" alt="" width="40" height="40" /></li></>)}</ul>
+  </div>
+</section>
+<style is:global>
+.areas{padding-block:clamp(64px,7vw,104px);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);overflow:hidden}
+.areas-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:clamp(26px,3vw,40px)}
+.areas-head h2{font-size:clamp(1.875rem,3vw,2.875rem)}
+.areas-meta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;color:var(--muted)}
+.mq-toggle{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--rule-strong);font-size:0.8125rem;font-weight:600;color:var(--ink)}
+.marquee{display:flex;width:max-content}
+.marquee ul{display:flex;align-items:center;gap:clamp(22px,2.6vw,40px);padding:0 clamp(11px,1.3vw,20px) 0 0;margin:0;list-style:none}
+.marquee li{font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:clamp(3.375rem,7vw,7rem);line-height:1;color:transparent;-webkit-text-stroke:1.2px rgba(25,28,29,.66);white-space:nowrap;transition:color .4s var(--ease)}
+.marquee li.mk img{width:clamp(30px,3.4vw,52px);height:auto}
+@media (hover:hover){ .marquee li:hover{color:var(--ink);-webkit-text-stroke-color:var(--ink)} }
+</style>

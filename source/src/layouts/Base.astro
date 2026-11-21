@@ -1,0 +1,44 @@
+---
+import '../styles/site.css';
+import '../styles/editor.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+interface Props { title: string; description: string; }
+const { title, description } = Astro.props;
+const site = 'https://bycre8tion.github.io/apex-builders-site/';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="icon" type="image/png" href="brand/favicon-32.png" />
+  <link rel="apple-touch-icon" href="brand/favicon-180.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Apex Builders" />
+  <meta property="og:title" content="Apex Builders | Custom homes and renovations" />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={site} />
+  <meta property="og:image" content={site + 'brand/og.jpg'} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content={site + 'brand/og.jpg'} />
+  {process.env.APEX_TARGET !== 'artifact' && <link rel="preload" as="image" href="media/60518a43f8ef053753318bda54163982-v2.webp" fetchpriority="high" />}
+</head>
+<body>
+  <Nav />
+  <main id="top"><span id="main" tabindex="-1"></span><slot /></main>
+  <Footer />
+  <script>
+    import { initInteractions } from '../scripts/interactions.js';
+    import { initMotion } from '../scripts/motion.js';
+    import { loadContent, applyContent, initEditor } from '../scripts/editor.js';
+    loadContent().then((c) => { applyContent(c); initInteractions(); initMotion(); initEditor(); });
+  </script>
+</body>
+</html>

@@ -1,3 +1,7 @@
-# Apex Builders website
+# Apex Builders website (preview)
 
-Temporary preview hosted on GitHub Pages. Will deploy to Firebase Hosting on apexbuildaz.com.
+Built with Astro from `source/`. Design rules live in `source/DESIGN.md`.
+
+```
+cd source && npm install && npm run build
+```

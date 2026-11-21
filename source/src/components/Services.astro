@@ -1,0 +1,49 @@
+---
+import Ph from './Ph.astro';
+import Label from './Label.astro';
+import { services } from '../data/site';
+---
+<section class="services section chalk" id="services" aria-labelledby="svc-h">
+  <div class="wrap">
+    <div class="head-row" data-reveal>
+      <div class="head" style="margin:0"><Label n="02" text="Services" /><h2 id="svc-h" data-edit="svc-title">What we build</h2></div>
+      <p class="lead" data-edit="svc-lead">One team from first sketch to final walkthrough, whether it is a new home, a full remodel or a commercial space.</p>
+    </div>
+    <div class="strips" id="strips">
+      {services.map((s, i) => (
+        <article class:list={['strip', 'on-dark', { 'is-open': i === 0 }]}>
+          <Ph slot={s.slot} alt={s.alt} label={s.alt} spec="Portrait or 4:5" />
+          <div class="strip-body">
+            <span class="strip-n">{String(i + 1).padStart(2, '0')}</span>
+            <h3 data-edit={`svc-${i}-t`}>{s.title}</h3>
+            <div class="strip-more"><div>
+              <p data-edit={`svc-${i}-p`}>{s.text}</p>
+              <a class="link" href={s.href}>{s.link} <span class="arr" aria-hidden="true">→</span></a>
+            </div></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+<style is:global>
+.strips{display:flex;gap:12px;height:clamp(520px,64vh,680px)}
+.strip{position:relative;flex:1 1 0;min-width:0;border-radius:var(--r-photo);overflow:hidden;transition:flex-grow .9s var(--ease);display:flex;align-items:flex-end}
+.strip.is-open{flex-grow:3.2}
+.strip .ph{position:absolute;inset:0}
+.strip::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(17,19,20,0) 25%,rgba(17,19,20,.62) 52%,rgba(17,19,20,.92))}
+.strip-body{position:relative;z-index:2;padding:24px;width:100%;display:flex;flex-direction:column;gap:12px}
+.strip-n{font-size:0.75rem;font-weight:500;letter-spacing:.16em;color:var(--plaster-2)}
+.strip h3{font-size:clamp(1.5rem,2.3vw,2.25rem);max-width:12ch}
+.strip:not(.is-open) h3{font-size:clamp(1.1875rem,1.6vw,1.5rem)}
+.strip-more{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .9s var(--ease),opacity .6s var(--ease)}
+.strip-more>div{overflow:hidden;display:flex;flex-direction:column;gap:16px;min-width:0}
+.strip.is-open .strip-more{grid-template-rows:1fr;opacity:1}
+.strip-more p{color:var(--plaster-2);max-width:40ch;font-size:0.9375rem}
+.strip .ph-label{z-index:3}
+@media (max-width:900px){
+  .strips{flex-direction:column;height:auto}
+  .strip,.strip.is-open{flex:none;min-height:420px}
+  .strip-more{grid-template-rows:1fr;opacity:1}
+}
+</style>

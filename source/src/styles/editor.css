@@ -1,0 +1,21 @@
+/* Editor chrome, only visible to people who can edit the artifact */
+.edbar{position:fixed;z-index:70;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px 8px 8px 16px;max-width:calc(100% - 32px);border-radius:var(--r-photo);background:var(--ink);color:var(--plaster)}
+.ed-status{font-size:0.8125rem;color:#C9CCCD;min-width:0;max-width:44ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ed-btn{height:38px;padding:0 16px;border-radius:var(--r-btn);font-size:0.875rem;font-weight:600;border:1px solid rgba(245,238,233,.3);white-space:nowrap}
+.ed-btn.primary{background:var(--orange);color:var(--ink);border-color:var(--orange)}
+.ed-btn:disabled{opacity:.45;cursor:default}
+@media (max-width:640px){ .ed-status{display:none} }
+.ph-up{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;gap:8px;flex-wrap:wrap;justify-content:center}
+.editing .ph-up{display:flex}
+.editing .ph.has-media .ph-up{left:12px;top:12px;transform:none}
+.editing .hero .ph .ph-up{top:96px}
+.ph-up button{height:44px;padding:0 18px;border-radius:var(--r-btn);font-size:0.875rem;font-weight:600;background:var(--orange);color:var(--ink)}
+.ph-up button.rm{background:#B42318;color:#fff}
+.editing .sig .ph-up{position:static;transform:none;display:flex}
+.sig .ph-up button{height:34px;padding:0 12px;font-size:0.8125rem}
+.editing .ph::before{content:"";position:absolute;inset:0;z-index:5;border:2px dashed rgba(253,96,2,.55);border-radius:inherit;pointer-events:none}
+.editing .ph.drop::before{border-color:var(--orange);background:rgba(253,96,2,.16)}
+.ph.busy .ph-up button:first-child{opacity:.6;pointer-events:none}
+.editing [contenteditable]{outline:1px dashed rgba(253,96,2,.6);outline-offset:4px;cursor:text}
+.editing [contenteditable]:focus{outline:2px solid var(--orange)}
+.editing .vid-toggle{display:none}

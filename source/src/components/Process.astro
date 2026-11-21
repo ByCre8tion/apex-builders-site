@@ -1,0 +1,49 @@
+---
+import Ph from './Ph.astro';
+import Label from './Label.astro';
+import Drawing from './Drawing.astro';
+import { steps } from '../data/site';
+---
+<section class="process has-draw" id="process" aria-labelledby="proc-h">
+  <Drawing n={3} class="draw-process" />
+  <div class="wrap process-head" data-reveal><Label n="05" text="How it works" /><h2 id="proc-h" data-edit="proc-title">From first call<br />to final walkthrough</h2></div>
+  <div class="track" id="track" role="region" aria-label="Process steps">
+    {steps.map((s, i) => (
+      <div class="step">
+        <Ph slot={s.slot} alt="" label={s.title} spec="4:3" />
+        <div class="step-body"><span class="step-n">{String(i + 1).padStart(2, '0')}</span><h3 data-edit={`step-${i}-t`}>{s.title}</h3><p data-edit={`step-${i}-p`}>{s.text}</p></div>
+      </div>
+    ))}
+    <div class="step end">
+      <h3 data-edit="step-end">Know your next step before you ask.</h3>
+      <a class="btn btn-dark" href="#contact">Get a quote <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"><div><span id="progress"></span></div></div>
+</section>
+<style is:global>
+.process{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:clamp(64px,9vh,104px) clamp(40px,6vh,72px);overflow:hidden}
+.draw-process{top:0}
+.draw-process img{width:min(1500px,105%);margin-inline:auto -4%;opacity:.75}
+.process h2{font-size:clamp(2.25rem,4.2vw,4.125rem)}
+.process-head{display:flex;flex-direction:column;gap:16px;margin-bottom:clamp(24px,4vh,44px);width:100%}
+.track{display:flex;gap:16px;padding-left:var(--gut);padding-right:var(--gut-r);width:max-content}
+.step{width:clamp(290px,min(30vw,50vh),440px);flex:0 0 auto;border-radius:var(--r-photo);background:var(--chalk);overflow:hidden;display:flex;flex-direction:column}
+.step .ph{aspect-ratio:16/10;border-radius:0}
+.step-body{padding:24px;display:flex;flex-direction:column;gap:10px}
+.step-n{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--ember);font-variant-numeric:tabular-nums}
+.step p{color:var(--ink-2)}
+.step.end{background:var(--orange);justify-content:space-between;padding:28px;--focus:var(--ink)}
+.step.end h3{font-size:clamp(2.125rem,3.4vw,3.25rem);line-height:.95}
+.step.end .btn{align-self:flex-start}
+.progress{max-width:var(--max);width:100%;margin:clamp(30px,3vw,44px) auto 0;padding-left:var(--gut);padding-right:var(--gut-r)}
+.progress div{height:2px;background:var(--rule);overflow:hidden}
+.progress span{display:block;height:100%;background:var(--orange);transform-origin:0 50%;transform:scaleX(0)}
+@media (max-width:900px){
+  .process{min-height:0;padding-block:var(--pad)}
+  .track{overflow-x:auto;scroll-snap-type:x mandatory;width:auto;padding-bottom:8px}
+  .step{scroll-snap-align:start}
+  .progress{display:none}
+}
+@media (prefers-reduced-motion: reduce){ .track{overflow-x:auto;scroll-snap-type:x mandatory;width:auto} .progress{display:none} }
+</style>

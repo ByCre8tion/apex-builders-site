@@ -1,0 +1,34 @@
+---
+import Ph from './Ph.astro';
+---
+<section class="hero on-dark" aria-labelledby="hero-h">
+  <div class="hero-frame" id="heroFrame">
+    <Ph slot="hero" class="hero-ph" eager alt="" label="Hero loop: slow drone push toward a finished Apex home at dusk" spec="16:9, 10 to 15 sec, muted loop" />
+    <div class="hero-scrim"></div>
+    <div class="hero-content wrap">
+      <span class="label hero-label" data-intro><b>Since 2016</b>Custom homes · Renovations · Commercial</span>
+      <h1 id="hero-h"><span class="line"><span data-edit="hero-1">The home you pictured.</span></span><span class="line"><span data-edit="hero-2">Built <em>right.</em></span></span></h1>
+      <div class="hero-bottom">
+        <p class="hero-sub" data-intro data-edit="hero-sub">Custom homes, renovations and commercial builds across the Valley. Honest pricing and a builder who calls you back.</p>
+        <div class="hero-ctas" data-intro>
+          <a class="btn btn-primary" href="#contact">Get a quote <span class="arr" aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="#projects">View our work</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style is:global>
+.hero-frame{position:relative;min-height:max(620px,100svh);overflow:hidden;display:flex;align-items:flex-end;transform-origin:50% 0}
+.hero-ph{position:absolute;inset:0;border-radius:0}
+.hero-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(17,19,20,.55) 0%,rgba(17,19,20,.12) 22%,rgba(17,19,20,.5) 44%,rgba(17,19,20,.8) 64%,rgba(17,19,20,.9) 100%),linear-gradient(90deg,rgba(17,19,20,.35),rgba(17,19,20,0) 70%)}
+.hero-content{position:relative;z-index:2;width:100%;padding-bottom:clamp(40px,7vh,80px)}
+.hero-label{margin-bottom:22px}
+.hero h1{font-size:clamp(3.375rem,8.2vw,8.25rem);line-height:.88;margin-bottom:clamp(22px,2.4vw,34px)}
+.hero h1 .line{display:block;overflow:hidden;padding-bottom:.04em}
+.hero h1 .line>span{display:block}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-bottom{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px 40px}
+.hero-sub{max-width:44ch;color:var(--plaster-2);font-size:clamp(1rem,1.3vw,1.1875rem)}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+</style>

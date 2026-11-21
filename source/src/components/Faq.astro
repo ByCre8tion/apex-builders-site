@@ -1,0 +1,47 @@
+---
+import Ph from './Ph.astro';
+import Label from './Label.astro';
+import { faq, contact } from '../data/site';
+---
+<section class="faq section chalk" id="faq" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div class="faq-side" data-reveal>
+      <Label n="08" text="Questions" />
+      <h2 id="faq-h" data-edit="faq-title">What people ask us first</h2>
+      <Ph slot="faq" alt="" label="Finished bathroom or kitchen detail" spec="4:5" />
+    </div>
+    <div class="faq-list" id="faqList">
+      {faq.map((f, i) => (
+        <div class:list={['qa', { open: i === 0 }]}>
+          <h3 class="qa-h"><button type="button" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`qa-${i}`} id={`qb-${i}`}><span data-edit={`faq-${i}-q`}>{f.q}</span><span class="pm" aria-hidden="true"></span></button></h3>
+          <div class="qa-a" id={`qa-${i}`} role="region" aria-labelledby={`qb-${i}`}><div><p data-edit={`faq-${i}-a`}>{f.a}</p></div></div>
+        </div>
+      ))}
+      <div class="faq-cta"><p data-edit="faq-cta">Still have a question?</p><a class="btn btn-primary" href={`tel:${contact.tel}`}>Call {contact.phone}</a></div>
+    </div>
+  </div>
+</section>
+<style is:global>
+.faq-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(30px,5vw,80px);align-items:stretch}
+.faq-side{display:flex;flex-direction:column;gap:20px}
+.faq-side h2{font-size:clamp(2.25rem,3.6vw,3.5rem)}
+.faq-side .ph{flex:1;min-height:240px}
+.faq-list{display:flex;flex-direction:column}
+.qa{border-bottom:1px solid var(--rule)}
+.qa:first-child{border-top:1px solid var(--rule)}
+.qa-h{font:inherit;text-transform:none;letter-spacing:0}
+.qa button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 2px;text-align:left;font-weight:500;font-size:1.0625rem;line-height:1.4;color:var(--ink)}
+.pm{flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid var(--rule-strong);position:relative;transition:background-color .3s ease-out,border-color .3s ease-out}
+.pm::before,.pm::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:1.5px;background:var(--ink);transform:translate(-50%,-50%);transition:transform .4s var(--ease)}
+.pm::after{transform:translate(-50%,-50%) rotate(90deg)}
+.qa.open .pm{background:var(--orange);border-color:var(--orange)}
+.qa.open .pm::after{transform:translate(-50%,-50%) rotate(0deg)}
+.qa-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.qa-a>div{overflow:hidden}
+.qa:not(.open) .qa-a>div{visibility:hidden;transition:visibility 0s linear .6s}
+.qa.open .qa-a{grid-template-rows:1fr}
+.qa-a p{padding:0 40px 22px 2px;color:var(--ink-2);font-size:0.9375rem;max-width:62ch}
+.faq-cta{margin-top:auto;padding-top:28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+.faq-cta p{font-family:var(--display);font-weight:600;font-size:1.25rem;text-transform:uppercase}
+@media (max-width:900px){ .faq-grid{grid-template-columns:minmax(0,1fr)} .faq-side .ph{flex:none;aspect-ratio:16/10;min-height:0} }
+</style>

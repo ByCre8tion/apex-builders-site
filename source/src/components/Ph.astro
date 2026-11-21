@@ -1,0 +1,16 @@
+---
+import media from '../data/media.json';
+interface Props { slot: string; class?: string; alt?: string; label?: string; spec?: string; kind?: 'image' | 'video'; eager?: boolean; parallax?: boolean; }
+const { slot, class: cls = '', alt = '', label = '', spec = '', kind = 'image', eager = false, parallax = false } = Astro.props;
+const m = (media as Record<string, { file: string; kind: string }>)[slot];
+const k = m?.kind ?? kind;
+const blob = process.env.APEX_TARGET === 'artifact';
+const src = m ? (blob ? '/_blob/' + m.file.split('/').pop().replace(/-v2\.webp$|\.mp4$/, '') : m.file) : '';
+---
+<div class:list={['ph', cls, { 'has-media': !!m }]} data-slot={slot} data-kind={k} data-parallax={parallax ? '' : undefined}>
+  <div class="ph-media">
+    {m && k === 'image' && <img class="ph-asset" src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : undefined} />}
+    {m && k === 'video' && <video class="ph-asset" src={src} muted loop playsinline preload="metadata" data-autoplay aria-label={alt || undefined}></video>}
+  </div>
+  {label && <div class="ph-label"><b>{k === 'video' ? 'VIDEO' : 'IMAGE'}</b><span>{label}</span>{spec && <i>{spec}</i>}</div>}
+</div>
