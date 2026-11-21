@@ -190,7 +190,7 @@ cite{display:block;margin-top:12px;font-family:var(--body);font-style:normal;fon
 
 /* Motion: hold animated content hidden until the script takes over, so nothing flashes and jumps */
 .motion [data-reveal],.motion [data-intro],.motion .page-head-in>*{opacity:0}
-.motion .hero h1 .line>span{transform:translateY(110%)}
+.motion:not(.motion-ready) .hero h1 .line>span{transform:translateY(110%)}
 
 /* Page to page transition: the old page lifts away, the new one wipes up from below. The nav stays put. */
 @view-transition{navigation:auto}

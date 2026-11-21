@@ -43,7 +43,7 @@ export function initMotion() {
   if ($('#heroFrame')) gsap.timeline({ defaults: { ease: 'expo.out' } })
     .from('#heroFrame', { clipPath: 'inset(4% 3% 4% 3% round 4px)', duration: 1.6, clearProps: 'clipPath' })
     .from('#heroFrame .ph-media', { scale: 1.14, duration: 2 }, 0)
-    .fromTo('.hero h1 .line > span', { yPercent: 110 }, { yPercent: 0, duration: 1.3, stagger: 0.1 }, 0.25)
+    .fromTo('.hero h1 .line > span', { y: 0, yPercent: 110 }, { y: 0, yPercent: 0, duration: 1.3, stagger: 0.1 }, 0.25)
     .fromTo('[data-intro]', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, stagger: 0.08 }, 0.6)
     .from('.nav-bar', { y: -16, opacity: 0, duration: 1 }, 0.5);
 
