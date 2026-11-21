@@ -1,0 +1,46 @@
+---
+/* Quiet proof line right under the hero. Rating comes from reviews.json, so it updates with the real Google numbers. */
+import { contact, cities } from '../data/site';
+import reviews from '../data/reviews.json';
+const star = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.8l2.5 5.3 5.8.7-4.3 4 1.1 5.7L10 14.7l-5.1 2.8 1.1-5.7-4.3-4 5.8-.7z" fill="currentColor"/></svg>';
+const items = [
+  { icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m9 12 2 2 4-4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>', t: 'Licensed, bonded, insured', s: `ROC #${contact.roc}` },
+  { icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10l8-6 8 6v10h-5v-6H9v6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>', t: 'Building since 2016', s: 'In the trade since 2008' },
+  { icon: '', stars: true, t: `${reviews.rating.toFixed(1)} on Google`, s: `${reviews.total} reviews`, href: '#reviews' },
+  { icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.25" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>', t: 'Serving the Valley', s: `${cities.length} cities and beyond` },
+];
+---
+<section class="trust" aria-label="Why homeowners trust Apex">
+  <ul class="wrap trust-row">
+    {items.map((it) => {
+      const inner = <><span class="trust-ico">{it.stars ? <span class="trust-stars" set:html={star.repeat(5)} /> : <Fragment set:html={it.icon} />}</span><span class="trust-txt"><b>{it.t}</b><span>{it.s}</span></span></>;
+      return <li data-reveal>{it.href ? <a href={it.href}>{inner}</a> : <div>{inner}</div>}</li>;
+    })}
+  </ul>
+</section>
+<style is:global>
+.trust{background:var(--white);border-bottom:1px solid var(--rule)}
+.trust-row{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-block:0;padding-block:0}
+.trust-row li{border-left:1px solid var(--rule)}
+.trust-row li:first-child{border-left:0}
+.trust-row li>*{display:flex;align-items:center;gap:14px;padding:26px 24px;height:100%}
+.trust-row li:first-child>*{padding-left:0}
+.trust-ico{flex:none;display:grid;place-items:center;color:var(--ember)}
+.trust-ico>svg{width:26px;height:26px}
+.trust-stars{display:flex;gap:1px;color:#F4B400}
+.trust-stars svg{width:14px;height:14px}
+.trust-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.trust-txt b{font-size:0.9375rem;font-weight:600;color:var(--ink)}
+.trust-txt span{font-size:0.8125rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.trust-row a .trust-txt b{text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px;transition:text-decoration-color .2s ease-out}
+@media (hover:hover){.trust-row a:hover .trust-txt b{text-decoration-color:currentColor}}
+@media (max-width:1000px){
+  .trust-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trust-row li:nth-child(3){border-left:0}
+  .trust-row li:nth-child(3)>*{padding-left:0}
+  .trust-row li:nth-child(n+3){border-top:1px solid var(--rule)}
+}
+@media (max-width:640px){
+  .trust-row li>*{flex-direction:column;align-items:flex-start;gap:10px;padding:20px 16px}
+}
+</style>

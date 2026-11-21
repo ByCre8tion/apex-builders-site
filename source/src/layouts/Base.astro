@@ -36,7 +36,7 @@ const site = 'https://bycre8tion.github.io/apex-builders-site/';
   <Nav current={current} />
   <main id="top"><span id="main" tabindex="-1"></span><slot /></main>
   <Footer />
-  <Concierge />
+  {current !== 'contact.html' && <Concierge />}
   <script>
     import { initInteractions } from '../scripts/interactions.js';
     import { initMotion } from '../scripts/motion.js';

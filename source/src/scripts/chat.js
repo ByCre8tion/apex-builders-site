@@ -1,22 +1,36 @@
-/* Concierge: ask the AI about Apex, or text Jason.
-   Answers come from, in order: the site's own AI endpoint (data-ai-endpoint, Phase 3),
-   Claude inside the artifact preview, or the built in answer set below. */
+/* Concierge: one conversation. It answers questions about Apex and, when someone wants a quote,
+   collects their name and number in the thread so Jason can text them back.
+   Answers come from, in order: the site's AI endpoint (data-ai-endpoint, Phase 3), Claude in the artifact preview,
+   or the built in answer set. Leads go to data-sms-endpoint once it is connected. */
 import { brief, local, pages } from '../data/kb';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const phoneSize = () => matchMedia('(max-width: 640px)').matches;
 const store = { get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} } };
 
-const RULES = `You are the assistant on the Apex Builders website. Answer the visitor using ONLY the facts below.
+const RULES = `You are the assistant on the Apex Builders website, answering for Jason, the owner. Answer the visitor using ONLY the facts below.
 Be warm, plain and brief: one to three short sentences, no headings, no lists.
 When a page on this site helps, link it as [Page name](file.html), using only the page files listed below.
-Never invent prices, dates, availability, warranties or anything not in the facts. If you do not know, say so and suggest texting Jason with the Text us tab or calling 602.345.1071.
+Never invent prices, dates, availability, warranties or anything not in the facts. If you do not know, say so and offer to have Jason text them (they can tap Get a quote) or call 602.345.1071.
 If the question is not about Apex Builders, building or this website, politely steer back.
 Do not use em dashes, and do not use hyphens as punctuation.
 
 FACTS:
 ${brief}`;
+
+/* What the assistant says first depends on the page */
+const PAGE = (location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, '');
+const GREET = {
+  gallery: ['Like what you see? Ask about a project like this one, or get a quote and Jason will text you back.', 'Like what you see? Ask about a project like this.'],
+  projects: ['Thinking about a project like these? Ask me anything, or get a quote and Jason will text you back.', 'Thinking about a project like this?'],
+  project: ['Planning something like this project? Ask me anything about it, or get a quote and Jason will text you back.', 'Planning something like this?'],
+  careers: ['Questions about a role? Ask here, or leave your number and Jason will text you.', 'Questions about a role?'],
+  services: ['Not sure which service fits? Ask me, or get a quote and Jason will text you back.', 'Not sure which service fits your project?'],
+  default: ['Hi, I am Jason\'s assistant. Ask anything about Apex Builders, or get a quote and Jason will text you back.', 'Questions about a project? Ask here and Jason will text you back.'],
+};
+const greet = GREET[PAGE.startsWith('project-') ? 'project' : PAGE] || GREET.default;
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const okHref = (h) => /^[a-z0-9-]+\.html(#[\w-]+)?$/i.test(h) || /^tel:\+?\d+$/.test(h) || /^mailto:[^\s"]+$/.test(h);
@@ -26,6 +40,8 @@ function render(text) {
     .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
     .replace(/\n/g, '<br>') + '</p>').join('');
 }
+const clock = () => new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+const tick = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 /* Built in answers: keyword overlap, good enough until the AI endpoint is live */
 const STOP = new Set('the and for you your are can how what does with that this have from about our any get much will who when where why which into just like need want'.split(' '));
@@ -37,148 +53,189 @@ function localAnswer(q) {
   const page = pages.find((p) => qw.has(p.label.toLowerCase().replace(/s$/, '')));
   if (best && score > 0) return best.a;
   if (page) return `That is on the [${page.label}](${page.href}) page.`;
-  return 'I do not have that answer yet. Text Jason with the Text us tab, or call 602.345.1071, and he will get back to you.';
+  return 'I do not have that answer yet. Tap Get a quote and Jason will text you, or call 602.345.1071.';
 }
+const WANTS_LEAD = /\b(quote|estimate|bid|call me|text me|contact me|reach me|get started|start (a|my) project|consult|set up a (call|meeting)|site walk)\b/i;
 
 export function initChat() {
   const root = $('#cg'); if (!root) return;
-  const panel = $('#cgPanel'), launch = $('#cgLaunch'), hello = $('#cgHello');
-  const tabs = $$('[role=tab]', panel), tabBar = $('.cg-tabs', panel);
-  const thread = $('#cgThread'), q = $('#cgQ'), askForm = $('#cgAskForm'), sendBtn = $('.cg-send', askForm), chips = $('#cgChips');
-  const textForm = $('#cgTextForm'), done = $('#cgDone');
+  const panel = $('#cgPanel'), launch = $('#cgLaunch'), hello = $('#cgHello'), badge = $('#cgBadge');
+  const thread = $('#cgThread'), log = $('#cgLog'), actions = $('#cgActions');
+  const form = $('#cgForm'), q = $('#cgQ'), sendBtn = $('#cgSend'), legal = $('#cgLegal'), qLabel = $('#cgQLabel');
   const history = [];
-  let sample = null, busy = false, ctl = null;
+  const lead = {};
+  let mode = 'ask', busy = false, sample = null;
 
-  /* Claude in the artifact preview */
   if (window.claude && window.claude.use) window.claude.use('sample').then((s) => { sample = s; }).catch(() => {});
 
-  const isOpen = () => !panel.hidden;
-  function open(tab) {
-    hideHello();
-    if (tab) select(tab);
-    if (isOpen()) return;
-    panel.hidden = false; panel.classList.remove('leaving'); panel.classList.add('in');
-    root.classList.add('open'); launch.setAttribute('aria-expanded', 'true'); launch.setAttribute('aria-label', 'Close chat');
-    const view = $('.cg-view:not([hidden])', panel);
-    setTimeout(() => ($('textarea, input', view) || view).focus({ preventScroll: true }), reduce ? 0 : 120);
-  }
-  function close(focusLaunch = true) {
-    if (!isOpen()) return;
-    root.classList.remove('open'); launch.setAttribute('aria-expanded', 'false'); launch.removeAttribute('aria-label');
-    const end = () => { panel.hidden = true; panel.classList.remove('leaving', 'in'); };
-    if (reduce) end(); else { panel.classList.add('leaving'); setTimeout(end, 180); }
-    if (focusLaunch) launch.focus();
-  }
-  launch.addEventListener('click', () => (isOpen() ? close() : open()));
-  $('#cgClose').addEventListener('click', () => close());
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen() && root.contains(document.activeElement)) close(); });
-
-  /* Greeting bubble: once per visit, after a few seconds */
-  function hideHello() { hello.hidden = true; store.set('cg-hello', '1'); }
-  if (!store.get('cg-hello')) setTimeout(() => { if (!isOpen()) hello.hidden = false; }, 6000);
-  $('#cgHelloX').addEventListener('click', hideHello);
-  $('#cgHelloOpen').addEventListener('click', () => open('ask'));
-
-  /* Tabs with arrow keys */
-  function select(which) {
-    tabs.forEach((t) => {
-      const on = (which === 'text') === (t.id === 'cgTabText');
-      t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1;
-      $('#' + t.getAttribute('aria-controls')).hidden = !on;
-    });
-    tabBar.classList.toggle('right', which === 'text');
-  }
-  tabs.forEach((t, i) => {
-    t.addEventListener('click', () => { select(i ? 'text' : 'ask'); });
-    t.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = tabs[(i + 1) % 2]; n.focus(); select(n.id === 'cgTabText' ? 'text' : 'ask'); } });
-  });
-  $$('[data-goto="text"]', root).forEach((b) => b.addEventListener('click', () => { select('text'); $('#cgName').focus(); }));
-
-  /* Ask */
-  const grow = () => { q.style.height = 'auto'; q.style.height = Math.min(q.scrollHeight, 120) + 'px'; };
-  q.addEventListener('input', () => { grow(); sendBtn.disabled = busy || !q.value.trim(); });
-  q.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); askForm.requestSubmit(); } });
-  sendBtn.disabled = true;
+  /* Messages */
   const scrollDown = () => { thread.scrollTop = thread.scrollHeight; };
-  function bubble(cls, html) { const d = document.createElement('div'); d.className = 'cg-msg ' + cls; d.innerHTML = html; thread.appendChild(d); scrollDown(); return d; }
+  function say(who, html, meta) {
+    const m = document.createElement('div'); m.className = 'cg-msg ' + who;
+    m.innerHTML = `<div class="cg-bub">${html}</div>` + (meta ? `<div class="cg-meta">${meta}</div>` : '');
+    log.appendChild(m); scrollDown(); return m;
+  }
+  function mine(text) {
+    $$('.cg-msg.me .cg-meta', log).forEach((n) => n.remove());
+    return say('me', render(text), `${tick}<span>Delivered ${clock()}</span>`);
+  }
+  const typing = () => say('bot', '<span class="cg-dots" aria-label="Typing"><i></i><i></i><i></i></span>');
+  const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
+  async function botSays(text, chips) {
+    const t = typing(); await wait(550);
+    $('.cg-bub', t).innerHTML = render(text);
+    if (chips) {
+      const c = document.createElement('div'); c.className = 'cg-chips';
+      chips.forEach(([label, fn]) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.addEventListener('click', () => { c.remove(); fn(); }); c.appendChild(b); });
+      t.appendChild(c);
+    }
+    scrollDown(); return t;
+  }
+  say('bot', render(greet[0]), `Assistant · ${clock()}`);
 
-  async function answer(question) {
-    const ep = root.dataset.aiEndpoint;
-    if (ep) {
-      const r = await fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history }) });
-      if (!r.ok) throw new Error('endpoint');
-      return (await r.json()).text;
-    }
-    if (sample) {
-      const turns = history.slice(-8).map((m) => ({ ...m }));
-      turns[0] = { role: 'user', content: RULES + '\n\nVisitor: ' + turns[0].content };
-      if (turns[0].role !== 'user') turns.shift();
-      ctl = new AbortController();
-      const out = bubble('bot', '<span class="cg-dots"><i></i><i></i><i></i></span>');
-      try {
-        const { text } = await sample(turns, { modelTier: 'quick', cache: false, signal: ctl.signal, onText: ({ text }) => { out.innerHTML = render(text); scrollDown(); } });
-        out.innerHTML = render(text); return { text, el: out };
-      } catch (err) { out.remove(); if (err && err.code === 'not_granted') sample = null; throw err; }
-    }
-    await new Promise((r) => setTimeout(r, reduce ? 0 : 500));
-    return localAnswer(question);
+  /* Input modes */
+  function setMode(m) {
+    mode = m;
+    const cfg = {
+      ask: ['Ask a question', 'Message', 'off', 'text'],
+      name: ['Your name', 'Your name', 'name', 'text'],
+      phone: ['Mobile number', 'Mobile number', 'tel', 'tel'],
+      details: ['A few words about the project', 'Project details', 'off', 'text'],
+    }[m];
+    q.placeholder = cfg[0]; qLabel.textContent = cfg[1]; q.setAttribute('autocomplete', cfg[2]); q.setAttribute('inputmode', cfg[3]);
+    legal.hidden = m !== 'phone';
+    q.removeAttribute('aria-invalid');
+    if (!phoneSize() || m !== 'ask') q.focus({ preventScroll: true });
   }
 
-  askForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const text = q.value.trim(); if (!text || busy) return;
-    busy = true; sendBtn.disabled = true; chips.hidden = true;
-    q.value = ''; grow();
-    bubble('me', render(text));
+  async function startLead() {
+    actions.hidden = true;
+    await botSays('Happy to help. Jason handles every quote himself. What is your name?');
+    setMode('name');
+  }
+
+  async function ask(text) {
     history.push({ role: 'user', content: text });
-    let typing = null;
-    if (!sample) typing = bubble('bot', '<span class="cg-dots" aria-label="Typing"><i></i><i></i><i></i></span>');
     let reply;
     try {
-      const r = await answer(text);
-      if (typeof r === 'object' && r.el) reply = r.text;
-      else { reply = r; typing ? (typing.innerHTML = render(reply)) : bubble('bot', render(reply)); typing = null; }
+      const ep = root.dataset.aiEndpoint;
+      if (ep) {
+        const t = typing();
+        const r = await fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history }) });
+        if (!r.ok) throw new Error('endpoint');
+        reply = (await r.json()).text; $('.cg-bub', t).innerHTML = render(reply);
+      } else if (sample) {
+        const turns = history.slice(-8).map((m) => ({ ...m }));
+        if (turns[0].role !== 'user') turns.shift();
+        turns[0] = { role: 'user', content: RULES + '\n\nVisitor: ' + turns[0].content };
+        const t = typing(), bub = $('.cg-bub', t);
+        try {
+          const res = await sample(turns, { modelTier: 'quick', cache: false, onText: ({ text: tx }) => { bub.innerHTML = render(tx); scrollDown(); } });
+          reply = res.text; bub.innerHTML = render(reply);
+        } catch (err) { t.remove(); if (err && err.code === 'not_granted') sample = null; throw err; }
+      } else {
+        reply = localAnswer(text); await botSays(reply);
+      }
     } catch (err) {
-      reply = localAnswer(text);
-      typing ? (typing.innerHTML = render(reply)) : bubble('bot', render(reply)); typing = null;
+      reply = localAnswer(text); await botSays(reply);
     }
     history.push({ role: 'assistant', content: reply });
-    busy = false; sendBtn.disabled = !q.value.trim(); scrollDown();
-  });
-  $$('button', chips).forEach((c) => c.addEventListener('click', () => { q.value = c.textContent; askForm.requestSubmit(); }));
+    scrollDown();
+  }
 
-  /* Text us */
-  const fields = $$('input, textarea', textForm);
-  const check = (f) => {
-    let ok = f.value.trim().length > 0;
-    if (f.type === 'tel') ok = f.value.replace(/\D/g, '').replace(/^1/, '').length === 10;
-    f.setAttribute('aria-invalid', !ok);
-    const err = $('#e-' + f.id); err.textContent = ok ? '' : f.dataset.msg;
-    if (ok) f.removeAttribute('aria-describedby'); else f.setAttribute('aria-describedby', err.id);
-    return ok;
-  };
-  fields.forEach((f) => ['input', 'blur'].forEach((ev) => f.addEventListener(ev, () => { if (f.getAttribute('aria-invalid') === 'true') check(f); })));
-  const phone = $('#cgPhone');
-  phone.addEventListener('input', () => {
-    const d = phone.value.replace(/\D/g, '').replace(/^1(?=\d{10})/, '').slice(0, 10);
-    phone.value = d.length > 6 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : d.length > 3 ? `(${d.slice(0, 3)}) ${d.slice(3)}` : d;
-  });
-  textForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const bad = fields.filter((f) => !check(f));
-    if (bad.length) { bad[0].focus(); return; }
-    const btn = $('.cg-submit', textForm); btn.disabled = true; btn.firstChild.textContent = 'Sending';
-    const data = Object.fromEntries(new FormData(textForm)); data.page = location.pathname.split('/').pop() || 'index.html';
-    const ep = root.dataset.smsEndpoint;
+  const fmtPhone = (d) => `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6)}`;
+  async function submitLead() {
+    const t = typing();
     try {
+      const ep = root.dataset.smsEndpoint;
+      const data = { ...lead, page: PAGE, transcript: history.slice(-10) };
       if (ep) { const r = await fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (!r.ok) throw new Error('sms'); }
-      else await new Promise((r) => setTimeout(r, 700)); /* Not connected yet: Phase 3 wires this to Jason's phone */
-      $('#cgDoneMsg').textContent = `Thanks, ${data.name.split(' ')[0]}. Jason will text you back at ${phone.value}.`;
-      textForm.hidden = true; done.hidden = false; done.focus();
-    } catch (err) {
-      $('#e-cgMsg').textContent = 'That did not send. Try again, or call 602.345.1071.';
+      else await wait(700); /* Not connected yet: Phase 3 sends this to Jason's phone */
+      $('.cg-bub', t).innerHTML = render(`Sent. Jason will text you at ${fmtPhone(lead.phone)} soon. Anything else I can help with while you wait?`);
+    } catch (e) {
+      $('.cg-bub', t).innerHTML = render(`That did not go through. Please call Jason at ${root.dataset.phone}.`);
     }
-    btn.disabled = false; btn.firstChild.textContent = 'Send text';
+    setMode('ask'); scrollDown();
+  }
+
+  async function handle(text) {
+    if (mode === 'name') {
+      lead.name = text.slice(0, 60);
+      await botSays(`Thanks, ${esc(lead.name.split(/\s+/)[0])}. What is the best mobile number to text you?`);
+      setMode('phone'); return;
+    }
+    if (mode === 'phone') {
+      const d = text.replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '');
+      if (d.length !== 10) { q.setAttribute('aria-invalid', 'true'); await botSays('That number looks incomplete. Could you send all 10 digits?'); q.focus(); return; }
+      lead.phone = d;
+      legal.hidden = true;
+      await botSays('Got it. What are you thinking of building or remodeling?', [['Skip', () => { lead.details = ''; mine('Skip'); submitLead(); }]]);
+      setMode('details'); return;
+    }
+    if (mode === 'details') { lead.details = text; $$('.cg-chips', log).forEach((c) => c.remove()); return submitLead(); }
+    if (WANTS_LEAD.test(text) && !lead.phone) { history.push({ role: 'user', content: text }); return startLead(); }
+    actions.hidden = true;
+    return ask(text);
+  }
+
+  /* Compose */
+  const grow = () => { q.style.height = 'auto'; q.style.height = Math.min(q.scrollHeight, 120) + 'px'; };
+  q.addEventListener('input', () => { grow(); sendBtn.disabled = busy || !q.value.trim(); if (mode === 'phone') q.removeAttribute('aria-invalid'); });
+  q.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = q.value.trim(); if (!text || busy) return;
+    busy = true; sendBtn.disabled = true; q.value = ''; grow();
+    mine(mode === 'phone' ? text.replace(/\D/g, '').length === 10 ? fmtPhone(text.replace(/\D/g, '')) : text : text);
+    await handle(text);
+    busy = false; sendBtn.disabled = !q.value.trim();
   });
-  $('#cgAgain').addEventListener('click', () => { textForm.reset(); fields.forEach((f) => f.removeAttribute('aria-invalid')); done.hidden = true; textForm.hidden = false; $('#cgMsg').focus(); });
+  $('[data-act="quote"]', actions).addEventListener('click', () => { mine('I would like a quote'); history.push({ role: 'user', content: 'I would like a quote' }); startLead(); });
+
+  /* Open and close */
+  const isOpen = () => !panel.hidden;
+  const scrim = $('#cgScrim');
+  function open() {
+    hideHello();
+    if (isOpen()) return;
+    panel.hidden = false; panel.style.transform = ''; panel.classList.remove('leaving', 'settle'); panel.classList.add('in');
+    root.classList.add('open'); launch.setAttribute('aria-expanded', 'true');
+    if (phoneSize()) document.documentElement.style.overflow = 'hidden';
+    setTimeout(() => { if (phoneSize()) $('#cgClose').focus({ preventScroll: true }); else q.focus({ preventScroll: true }); scrollDown(); }, reduce ? 0 : 150);
+  }
+  function close() {
+    if (!isOpen()) return;
+    root.classList.remove('open'); launch.setAttribute('aria-expanded', 'false');
+    document.documentElement.style.overflow = '';
+    const end = () => { panel.hidden = true; panel.classList.remove('leaving', 'in', 'settle'); panel.style.transform = ''; };
+    if (reduce) end(); else { panel.classList.remove('in'); panel.classList.add('leaving'); setTimeout(end, phoneSize() ? 250 : 180); }
+    launch.focus({ preventScroll: true });
+  }
+  launch.addEventListener('click', () => (isOpen() ? close() : open()));
+  $('#cgClose').addEventListener('click', close);
+  scrim.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) close(); });
+
+  /* Drag the sheet down to close it on phones */
+  let y0 = null, dy = 0, t0 = 0;
+  const startDrag = (e) => { if (!phoneSize() || e.target.closest('button, a')) return; y0 = e.clientY; dy = 0; t0 = performance.now(); panel.classList.remove('in', 'settle'); panel.classList.add('dragging'); e.currentTarget.setPointerCapture?.(e.pointerId); };
+  const moveDrag = (e) => { if (y0 === null) return; dy = Math.max(0, e.clientY - y0); panel.style.transform = `translateY(${dy}px)`; };
+  const endDrag = () => {
+    if (y0 === null) return; y0 = null; panel.classList.remove('dragging');
+    const fast = dy / Math.max(1, performance.now() - t0) > 0.6;
+    panel.classList.add('settle');
+    if (dy > 120 || (fast && dy > 30)) {
+      panel.style.transform = 'translateY(100%)';
+      root.classList.remove('open'); launch.setAttribute('aria-expanded', 'false'); document.documentElement.style.overflow = '';
+      setTimeout(() => { panel.hidden = true; panel.classList.remove('settle'); panel.style.transform = ''; launch.focus({ preventScroll: true }); }, 300);
+    } else panel.style.transform = '';
+  };
+  [$('#cgGrab'), $('.cg-head', panel)].forEach((h) => { h.addEventListener('pointerdown', startDrag); h.addEventListener('pointermove', moveDrag); h.addEventListener('pointerup', endDrag); h.addEventListener('pointercancel', endDrag); });
+
+  /* Greeting bubble with a badge, once per visit */
+  function hideHello() { hello.hidden = true; badge.hidden = true; store.set('cg-hello', '1'); }
+  $('#cgHelloText').textContent = greet[1];
+  if (!store.get('cg-hello')) setTimeout(() => { if (!isOpen()) { hello.hidden = false; badge.hidden = false; } }, 6000);
+  $('#cgHelloX').addEventListener('click', hideHello);
+  $('#cgHelloOpen').addEventListener('click', open);
 }

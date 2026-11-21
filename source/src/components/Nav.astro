@@ -34,20 +34,20 @@ const { current = '' } = Astro.props as { current?: string };
 .brand{display:flex;align-items:center;gap:12px;font-weight:600;font-size:0.8125rem;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
 .brand img{width:38px;height:38px}
 .nav-links{display:flex;margin-inline:auto}
-.nav-links a{position:relative;padding:10px 16px;font-size:0.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
-.nav-links a::after{content:"";position:absolute;left:16px;right:16px;bottom:5px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s ease-out}
+.nav-links a{position:relative;padding:10px 14px;font-size:0.9375rem;font-weight:500;letter-spacing:.005em}
+.nav-links a::after{content:"";position:absolute;left:14px;right:14px;bottom:5px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s ease-out}
 .nav-links a:focus-visible::after,.nav-links a[aria-current]::after{transform:none}
 .nav-right{display:flex;align-items:center;gap:22px;margin-left:auto}
 .nav-links+.nav-right{margin-left:0}
 .nav-phone{font-size:0.875rem;font-weight:500;font-variant-numeric:tabular-nums}
-.nav-cta{height:42px;padding:0 18px;font-size:0.75rem;letter-spacing:.16em;text-transform:uppercase;border-color:currentColor;color:inherit}
+.nav-cta{height:42px;padding:0 18px;font-size:0.9375rem;font-weight:600;letter-spacing:.005em;border-color:currentColor;color:inherit}
 .nav.solid .nav-cta,.menu-open .nav-cta{background:var(--ink);border-color:var(--ink);color:var(--white)}
 @media (hover:hover){
   .nav-links a:hover::after{transform:none}
   .nav-cta:hover{background:var(--white);border-color:var(--white);color:var(--ink)}
   .nav.solid .nav-cta:hover{background:var(--orange);border-color:var(--orange);color:var(--ink)}
 }
-.menu-btn{display:none;align-items:center;gap:12px;min-height:44px;font-size:0.75rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+.menu-btn{display:none;align-items:center;gap:12px;min-height:44px;font-size:0.9375rem;font-weight:600}
 .mb-icon{position:relative;display:block;width:22px;height:8px}
 .mb-icon::before,.mb-icon::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:currentColor;transition:transform .3s ease-out}
 .mb-icon::before{top:0}.mb-icon::after{bottom:0}
@@ -56,11 +56,12 @@ const { current = '' } = Astro.props as { current?: string };
 .sheet{position:fixed;inset:0;z-index:45;background:var(--white);color:var(--ink);padding:calc(96px + env(safe-area-inset-top,0px)) var(--gut-r) 32px var(--gut);display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;transform:translateY(-100%);visibility:hidden;transition:transform .45s var(--ease),visibility 0s linear .45s}
 .menu-open .sheet{transform:none;visibility:visible;transition:transform .7s var(--ease),visibility 0s}
 .sheet .big{display:flex;align-items:baseline;gap:18px;padding-block:14px;border-bottom:1px solid var(--rule);font-family:var(--display);font-weight:700;font-size:clamp(2.5rem,11vw,3.5rem);line-height:1;text-transform:uppercase}
-.sheet .n{font-family:var(--body);font-size:0.75rem;font-weight:500;letter-spacing:.16em;color:var(--muted)}
+.sheet .n{font-family:var(--body);font-size:0.8125rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--muted)}
 .sheet-foot{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:auto;padding-top:32px;color:var(--ink-2)}
 .sheet-foot .btn{margin-bottom:8px}
 @media (max-width:1100px){
   .nav-links,.nav-phone{display:none}
+  .nav-links+.nav-right{margin-left:auto}
   .menu-btn{display:inline-flex}
 }
 @media (max-width:640px){
