@@ -182,20 +182,24 @@ function initCarousel() {
 }
 
 function initWidgets() {
-  const STEPS = ['Call or referral', 'Walk the site', 'Budget and design', 'Proposal for review', 'Pricing locked', 'Build and hand over'];
   const tr = $('#tracker'), est = $('#estimate');
   if (tr) {
-    const bars = $$('.tr-bars i', tr), n = $('.tr-n', tr), name = $('.tr-name', tr), row = $('.tr-step', tr);
-    let k = 2, timer = null;
-    const show = (j) => { bars.forEach((b, x) => b.classList.toggle('on', x <= j)); n.textContent = String(j + 1).padStart(2, '0'); name.textContent = STEPS[j]; };
-    show(k);
-    if (!reduce) {
-      const tick = () => { k = (k + 1) % STEPS.length; row.classList.add('out'); setTimeout(() => { show(k); row.classList.remove('out'); }, 250); };
-      new IntersectionObserver(([e]) => { clearInterval(timer); if (e.isIntersecting) timer = setInterval(tick, 2200); }, { threshold: 0.4 }).observe(tr);
+    /* A today line moves across the schedule; phases fill as it passes */
+    const body = $('.sched-body', tr), rows = $$('.sched-row', tr).map((r) => ({ r, s: +r.dataset.s / 12, e: +r.dataset.e / 12, bar: $('i', r) }));
+    const draw = (t) => {
+      body.style.setProperty('--t', t);
+      rows.forEach(({ r, s, e, bar }) => { const p = Math.min(1, Math.max(0, (t - s) / (e - s))); bar.style.setProperty('--p', p); r.classList.toggle('on', t >= s); r.classList.toggle('now', t >= s && t < e); });
+    };
+    if (reduce) draw(0.42);
+    else {
+      let raf = 0, t0 = 0; const LOOP = 9000, HOLD = 1400;
+      const frame = (now) => { if (!t0) t0 = now; const k = (now - t0) % (LOOP + HOLD); draw(Math.min(1, k / LOOP)); raf = requestAnimationFrame(frame); };
+      draw(0);
+      new IntersectionObserver(([e]) => { cancelAnimationFrame(raf); if (e.isIntersecting) { t0 = 0; raf = requestAnimationFrame(frame); } }, { threshold: 0.3 }).observe(tr);
     }
   }
   if (est) {
     if (reduce) est.classList.add('play');
-    else new IntersectionObserver(([e]) => est.classList.toggle('play', e.isIntersecting), { threshold: 0.5 }).observe(est);
+    else new IntersectionObserver(([e]) => { if (e.isIntersecting) est.classList.add('play'); }, { threshold: 0.6 }).observe(est);
   }
 }

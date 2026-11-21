@@ -65,7 +65,7 @@ const star = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m10 1.8 2.5 5
 .rv-row{overflow:hidden}
 .rv-track{display:flex;gap:16px;width:max-content;margin:0;padding:0;list-style:none;animation:rv-slide var(--rv-dur,70s) linear infinite}
 .rv-row.rev .rv-track{animation-direction:reverse;--rv-dur:80s}
-.rv-rows:hover .rv-track,.rv-rows:focus-within .rv-track,.rv-rows.paused .rv-track{animation-play-state:paused}
+.rv-rows.paused .rv-track{animation-play-state:paused}
 @keyframes rv-slide{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
 .rv-card{width:clamp(300px,30vw,400px);flex:none;display:flex;flex-direction:column;gap:16px;padding:24px;background:var(--white);border:1px solid var(--rule);border-radius:var(--r-photo);transition:border-color .25s ease-out}
 @media (hover:hover){ .rv-card:hover{border-color:var(--rule-strong)} }

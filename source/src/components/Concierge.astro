@@ -1,0 +1,172 @@
+---
+/* Bottom right helper: ask the AI about Apex, or send Jason a text.
+   data-ai-endpoint and data-sms-endpoint get filled in when the backend is connected (Phase 3). */
+import { contact } from '../data/site';
+const send = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4.5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const x = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>';
+---
+<div class="cg" id="cg" data-ai-endpoint="" data-sms-endpoint="">
+  <div class="cg-hello" id="cgHello" hidden>
+    <button type="button" class="cg-hello-x" id="cgHelloX" aria-label="Dismiss" set:html={x} />
+    <button type="button" class="cg-hello-body" id="cgHelloOpen">
+      <span class="cg-av" aria-hidden="true">J</span>
+      <span><b>Questions about a project?</b>Ask here, or send Jason a text.</span>
+    </button>
+  </div>
+
+  <section class="cg-panel" id="cgPanel" role="dialog" aria-modal="false" aria-labelledby="cgTitle" hidden>
+    <header class="cg-head">
+      <img src="brand/logo.svg" alt="" width="34" height="34" />
+      <div><h2 id="cgTitle">Apex Builders</h2><p>Ask a question or text Jason</p></div>
+      <button type="button" class="cg-close" id="cgClose" aria-label="Close" set:html={x} />
+    </header>
+    <div class="cg-tabs" role="tablist" aria-label="How to reach us">
+      <button type="button" role="tab" id="cgTabAsk" aria-controls="cgAsk" aria-selected="true">Ask</button>
+      <button type="button" role="tab" id="cgTabText" aria-controls="cgText" aria-selected="false" tabindex="-1">Text us</button>
+      <span class="cg-tab-ink" aria-hidden="true"></span>
+    </div>
+
+    <div class="cg-view" id="cgAsk" role="tabpanel" aria-labelledby="cgTabAsk">
+      <div class="cg-thread" id="cgThread" aria-live="polite" data-lenis-prevent>
+        <div class="cg-msg bot"><p>Hi, I can answer questions about Apex Builders, our services and this site. What are you planning?</p></div>
+        <div class="cg-chips" id="cgChips">
+          <button type="button">What areas do you serve?</button>
+          <button type="button">How does pricing work?</button>
+          <button type="button">Do you do kitchen remodels?</button>
+          <button type="button">Can I see your projects?</button>
+        </div>
+      </div>
+      <form class="cg-compose" id="cgAskForm">
+        <label class="sr-only" for="cgQ">Your question</label>
+        <textarea id="cgQ" rows="1" placeholder="Ask about Apex Builders" maxlength="500" autocomplete="off"></textarea>
+        <button type="submit" class="cg-send" aria-label="Send question" set:html={send} />
+      </form>
+      <p class="cg-foot">Answers are automated. For anything about your project, <button type="button" class="cg-link" data-goto="text">text Jason</button>.</p>
+    </div>
+
+    <div class="cg-view" id="cgText" role="tabpanel" aria-labelledby="cgTabText" hidden>
+      <form class="cg-form" id="cgTextForm" novalidate data-lenis-prevent>
+        <p class="cg-intro">Leave your number and Jason will text you back.</p>
+        <div class="cg-field"><label for="cgName">Name</label><input id="cgName" name="name" autocomplete="name" required data-msg="Enter your name." /><span class="cg-err" id="e-cgName"></span></div>
+        <div class="cg-field"><label for="cgPhone">Mobile number</label><input id="cgPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required data-msg="Enter a mobile number with 10 digits." /><span class="cg-err" id="e-cgPhone"></span></div>
+        <div class="cg-field"><label for="cgMsg">Message</label><textarea id="cgMsg" name="message" rows="3" required data-msg="Tell us a little about your project."></textarea><span class="cg-err" id="e-cgMsg"></span></div>
+        <button type="submit" class="btn btn-primary cg-submit">Send text<span set:html={send} /></button>
+        <p class="cg-legal">By sending, you agree to receive text messages from Apex Builders at this number. Message and data rates may apply. Reply STOP to opt out.</p>
+      </form>
+      <div class="cg-done" id="cgDone" hidden tabindex="-1">
+        <span class="cg-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <h3>Message sent</h3>
+        <p id="cgDoneMsg">Jason will text you back soon.</p>
+        <p class="cg-alt">Need us sooner? Call <a href={`tel:${contact.tel}`}>{contact.phone}</a>.</p>
+        <button type="button" class="cg-link" id="cgAgain">Send another message</button>
+      </div>
+    </div>
+  </section>
+
+  <button type="button" class="cg-launch" id="cgLaunch" aria-expanded="false" aria-controls="cgPanel">
+    <span class="cg-ico" aria-hidden="true">
+      <svg class="i-chat" viewBox="0 0 24 24"><path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4 3.5v-3.5h0a1.5 1.5 0 0 1-1.5-1.5z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M8.5 10.5h7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+      <svg class="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+    </span>
+    <span class="cg-label">Text us</span>
+  </button>
+</div>
+
+<style is:global>
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.cg{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:12px;font-size:0.9375rem}
+.editing .cg,.menu-open .cg{display:none}
+.cg [hidden]{display:none!important}
+/* Launcher */
+.cg-launch{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 20px 0 16px;border-radius:999px;background:var(--ink);color:var(--white);font-weight:600;font-size:0.875rem;letter-spacing:.02em;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 10px 30px -8px rgba(25,28,29,.45);transition:background-color .2s ease-out,transform .15s ease-out;-webkit-tap-highlight-color:transparent}
+.cg-launch:active{transform:scale(.96)}
+@media (hover:hover){.cg-launch:hover{background:#000}}
+.cg-ico{position:relative;width:24px;height:24px;color:var(--orange)}
+.cg-ico svg{position:absolute;inset:0;transition:opacity .3s cubic-bezier(.2,0,0,1),transform .3s cubic-bezier(.2,0,0,1),filter .3s cubic-bezier(.2,0,0,1)}
+.cg-ico .i-x{opacity:0;transform:scale(.25);filter:blur(4px);color:var(--white)}
+.cg.open .cg-ico .i-chat{opacity:0;transform:scale(.25);filter:blur(4px)}
+.cg.open .cg-ico .i-x{opacity:1;transform:none;filter:none}
+.cg.open .cg-label{display:none}
+.cg.open .cg-launch{padding:0;width:52px;justify-content:center}
+/* Greeting */
+.cg-hello{position:relative;max-width:290px;background:var(--white);border:1px solid var(--rule);border-radius:var(--r-photo);box-shadow:0 16px 40px -16px rgba(25,28,29,.35);animation:cg-pop .45s cubic-bezier(.16,1,.3,1) both;transform-origin:bottom right}
+.cg-hello-body{display:flex;gap:12px;align-items:flex-start;padding:16px 34px 16px 16px;text-align:left;font-size:0.875rem;line-height:1.45;color:var(--ink-2)}
+.cg-hello-body b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+.cg-hello-x{position:absolute;top:4px;right:4px;width:32px;height:32px;display:grid;place-items:center;color:var(--muted)}
+.cg-hello-x svg{width:16px;height:16px}
+.cg-av{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:var(--ink);font-family:var(--display);font-weight:700;font-size:1.125rem}
+@keyframes cg-pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
+/* Panel */
+.cg-panel{width:min(392px,calc(100vw - 32px));height:min(620px,calc(100dvh - 112px));display:flex;flex-direction:column;background:var(--white);border:1px solid var(--rule);border-radius:var(--r-photo);overflow:hidden;box-shadow:0 30px 60px -20px rgba(25,28,29,.4);transform-origin:bottom right}
+.cg-panel.in{animation:cg-in .4s cubic-bezier(.16,1,.3,1) both}
+.cg-panel.leaving{animation:cg-out .18s ease-out both}
+@keyframes cg-in{from{opacity:0;transform:translateY(12px) scale(.97)}}
+@keyframes cg-out{to{opacity:0;transform:translateY(8px) scale(.99)}}
+.cg-head{display:flex;align-items:center;gap:12px;padding:16px 10px 16px 18px;background:var(--ink);color:var(--plaster)}
+.cg-head img{width:34px;height:34px;background:var(--white);border-radius:50%;padding:3px}
+.cg-head h2{font-family:var(--body);font-size:0.9375rem;font-weight:600;letter-spacing:.02em;text-transform:none;color:var(--white)}
+.cg-head p{font-size:0.8125rem;color:var(--plaster-2);opacity:.8}
+.cg-close{margin-left:auto;width:40px;height:40px;display:grid;place-items:center;color:var(--plaster)}
+.cg-close svg{width:18px;height:18px}
+.cg-tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule)}
+.cg-tabs [role=tab]{height:46px;font-size:0.75rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);transition:color .15s ease-out}
+.cg-tabs [aria-selected=true]{color:var(--ink)}
+.cg-tab-ink{position:absolute;left:0;bottom:-1px;width:50%;height:2px;background:var(--orange);transition:transform .35s cubic-bezier(.2,0,0,1)}
+.cg-tabs.right .cg-tab-ink{transform:translateX(100%)}
+.cg-view{flex:1;min-height:0;display:flex;flex-direction:column}
+.cg-view[hidden]{display:none}
+.cg-thread{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:18px;display:flex;flex-direction:column;gap:10px;background:var(--chalk)}
+.cg-msg{max-width:86%;padding:10px 14px;border-radius:14px;line-height:1.5;font-size:0.9375rem;animation:cg-msg .3s ease-out both;overflow-wrap:anywhere}
+@keyframes cg-msg{from{opacity:0;transform:translateY(6px)}}
+.cg-msg.bot{align-self:flex-start;background:var(--white);border:1px solid var(--rule);border-bottom-left-radius:4px;color:var(--ink)}
+.cg-msg.me{align-self:flex-end;background:var(--ink);color:var(--white);border-bottom-right-radius:4px}
+.cg-msg a{color:var(--ember);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.cg-msg p+p{margin-top:6px}
+.cg-dots{display:inline-flex;gap:4px;padding:4px 0}
+.cg-dots i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:cg-dot 1s ease-in-out infinite}
+.cg-dots i:nth-child(2){animation-delay:.15s}.cg-dots i:nth-child(3){animation-delay:.3s}
+@keyframes cg-dot{0%,60%,100%{opacity:.3}30%{opacity:1}}
+.cg-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.cg-chips button{padding:8px 12px;border:1px solid var(--rule-strong);border-radius:999px;background:var(--white);font-size:0.8125rem;font-weight:500;color:var(--ink);transition:border-color .15s ease-out,background-color .15s ease-out}
+@media (hover:hover){.cg-chips button:hover{border-color:var(--ink)}}
+.cg-compose{display:flex;align-items:flex-end;gap:8px;padding:12px 12px 8px;border-top:1px solid var(--rule)}
+.cg-compose textarea{flex:1;resize:none;max-height:120px;padding:11px 14px;border:1px solid var(--rule-strong);border-radius:var(--r-photo);font:inherit;font-size:1rem;line-height:1.4;background:var(--white);color:var(--ink)}
+.cg-compose textarea:focus-visible,.cg-form input:focus-visible,.cg-form textarea:focus-visible{outline:2px solid var(--focus,var(--ember));outline-offset:1px}
+.cg-send{flex:none;width:46px;height:46px;display:grid;place-items:center;border-radius:var(--r-btn);background:var(--orange);color:var(--ink);transition:transform .15s ease-out,opacity .15s ease-out}
+.cg-send:not(:disabled):active{transform:scale(.96)}
+.cg-send:disabled{opacity:.45}
+.cg-send svg,.cg-submit span svg{width:18px;height:18px}
+.cg-foot{padding:0 16px 12px;font-size:0.75rem;color:var(--muted)}
+.cg-link{color:var(--ember);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:inherit}
+.cg-form{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:18px;display:flex;flex-direction:column;gap:14px}
+.cg-intro{color:var(--ink-2)}
+.cg-field{display:flex;flex-direction:column;gap:6px}
+.cg-field label{font-size:0.8125rem;font-weight:600;color:var(--ink)}
+.cg-form input,.cg-form textarea{padding:11px 14px;border:1px solid var(--rule-strong);border-radius:var(--r-btn);font:inherit;font-size:1rem;background:var(--white);color:var(--ink);resize:vertical}
+.cg-form [aria-invalid=true]{border-color:#B3261E}
+.cg-err{font-size:0.8125rem;color:#B3261E;min-height:0}
+.cg-err:empty{display:none}
+.cg-submit{justify-content:center;gap:10px}
+.cg-submit span{display:inline-flex}
+.cg-legal{font-size:0.6875rem;line-height:1.5;color:var(--muted)}
+.cg-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:28px;text-align:center}
+.cg-done:focus{outline:none}
+.cg-done h3{font-size:1.75rem}
+.cg-done p{color:var(--ink-2);max-width:28ch}
+.cg-alt a{color:var(--ink);font-weight:600}
+.cg-tick{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:var(--ink)}
+.cg-tick svg{width:28px;height:28px}
+.cg-tick path{stroke-dasharray:24;stroke-dashoffset:24;animation:cg-tick .5s ease-out .15s forwards}
+@keyframes cg-tick{to{stroke-dashoffset:0}}
+@media (max-width:640px){
+  .cg-label{display:none}
+  .cg-launch{width:56px;height:56px;padding:0;justify-content:center}
+  .cg.open .cg-launch{width:56px;height:56px}
+  .cg-panel{height:calc(100dvh - 104px - env(safe-area-inset-top,0px))}
+}
+@media (prefers-reduced-motion:reduce){
+  .cg-hello,.cg-panel.in,.cg-panel.leaving,.cg-msg,.cg-dots i{animation:none}
+  .cg-ico svg{transition:opacity .2s}
+  .cg-tick path{animation:none;stroke-dashoffset:0}
+}
+</style>
