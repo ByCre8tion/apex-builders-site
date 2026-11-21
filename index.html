@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><meta name="description" content="Apex Builders: custom homes, renovations, design build and commercial TI across the Phoenix Valley."><style>[hidden]{display:none!important}img{max-width:100%}</style></head><body><title>Apex Builders Website</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><meta name="description" content="Apex Builders: custom homes, renovations, design build and commercial TI across the Phoenix Valley."><title>Apex Builders | Custom Homes and Renovations in the Phoenix Valley</title><link rel="icon" type="image/png" href="brand/favicon-32.png"><link rel="apple-touch-icon" href="brand/favicon-180.png"><meta property="og:type" content="website"><meta property="og:site_name" content="Apex Builders"><meta property="og:title" content="Apex Builders | Custom homes and renovations"><meta property="og:description" content="Custom homes, renovations, design build and commercial builds across the Valley. Call 602.345.1071."><meta property="og:url" content="https://bycre8tion.github.io/apex-builders-site/"><meta property="og:image" content="https://bycre8tion.github.io/apex-builders-site/brand/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://bycre8tion.github.io/apex-builders-site/brand/og.jpg"><meta name="theme-color" content="#FFFFFF"><style>[hidden]{display:none!important}img{max-width:100%}</style></head><body><title>Apex Builders Website</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
@@ -414,6 +414,135 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 @media (prefers-reduced-transparency: reduce){
   .nav-bar,.form,.ph-label{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}
 }
+
+/* ===== Phase 2: white page, flat nav, light cards ===== */
+:root{--bg:#FFFFFF;--soft:#F6F4F1;--soft-2:#ECE8E3;--panel:#FFFFFF;--line:rgba(25,28,29,.1);--line-strong:rgba(25,28,29,.24)}
+.sheet-light{background:var(--soft)}
+
+/* Nav: one flat bar, clear over the hero, white once the page scrolls */
+.nav{padding:0;color:#F5EEE9;transition:transform .7s var(--ease),background-color .3s ease-out,color .3s ease-out,box-shadow .3s ease-out}
+.nav-bar{max-width:var(--max);height:76px;padding:0 var(--gut-r) 0 var(--gut);border-radius:0;background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.nav.solid,.menu-open .nav{background:#FFFFFF;color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.brand{color:inherit}
+.nav-links{gap:28px}
+.nav-links a{position:relative;padding:8px 0;border-radius:0;color:inherit;font-size:0.9375rem;font-weight:500;background:none}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s ease-out}
+.nav-links a:focus-visible::after{transform:none}
+.nav-phone{color:inherit;font-weight:500;font-variant-numeric:tabular-nums}
+.nav .btn{height:42px;border-radius:999px;padding:0 20px}
+.menu-btn span,.menu-btn span::before,.menu-btn span::after{background:currentColor}
+.menu-open .menu-btn span{background:transparent}
+.sheet{background:#FFFFFF;color:var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none;padding-top:calc(104px + env(safe-area-inset-top,0px))}
+.sheet a.big{border-bottom:1px solid var(--line);padding-block:6px}
+.hero-frame::before{content:"";position:absolute;inset:0 0 auto;height:180px;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(17,19,20,.55),rgba(17,19,20,0))}
+@media (hover:hover){
+  .nav-links a:hover{background:none;color:inherit}
+  .nav-links a:hover::after{transform:none}
+  .btn-outline:hover{border-color:var(--ink);background:var(--soft)}
+}
+@media (prefers-reduced-transparency: reduce){ .nav-bar{background:none} }
+
+/* Outline button for light surfaces */
+.btn-outline{border:1px solid var(--line-strong);color:var(--ink)}
+
+/* Projects: white cards that tuck under each other cleanly */
+.card{top:calc(100px + env(safe-area-inset-top,0px))}
+.card-inner{background:#FFFFFF;color:var(--ink);border:1px solid var(--line);box-shadow:0 1px 2px rgba(25,28,29,.04),0 30px 60px -30px rgba(25,28,29,.28)}
+.card-info dt{color:var(--muted)}
+
+/* Bento: light cells with small live widgets */
+.cell.soft{background:var(--soft);color:var(--ink);justify-content:flex-start}
+.cell.soft h3{margin-top:auto}
+.cell.soft p{color:var(--ink-soft);max-width:36ch}
+.tracker,.est{background:#FFFFFF;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:26px;box-shadow:0 1px 2px rgba(25,28,29,.04),0 12px 30px -16px rgba(25,28,29,.22)}
+.tr-top,.est-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:0.8125rem;color:var(--muted)}
+.tr-top b,.est-head b{font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.tr-bars{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:14px 0}
+.tr-bars i{height:6px;border-radius:3px;background:var(--soft-2);position:relative;overflow:hidden}
+.tr-bars i::after{content:"";position:absolute;inset:0;background:var(--orange);transform:scaleX(0);transform-origin:left;transition:transform .45s ease-out}
+.tr-bars i.on::after{transform:none}
+.tr-step{display:flex;align-items:baseline;gap:12px;transition:opacity .25s ease-out,transform .25s ease-out}
+.tr-step.out{opacity:0;transform:translateY(4px)}
+.tr-n{font-family:var(--display);font-weight:700;font-size:2.5rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--accent-text)}
+.tr-name{font-weight:600;font-size:0.9375rem}
+.est-head{padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.est ul{list-style:none;margin:0;padding:0}
+.est li{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:0.9375rem;font-weight:500;opacity:.4;transition:opacity .4s ease-out}
+.est .ld{flex:1;border-bottom:1px dotted var(--line-strong);transform:translateY(-3px)}
+.est svg{width:18px;height:18px;flex:none;color:var(--accent-text)}
+.est svg path{stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .45s ease-out}
+.est.play li{opacity:1}
+.est.play svg path{stroke-dashoffset:0}
+.est li:nth-child(2),.est li:nth-child(2) path{transition-delay:.35s}
+.est li:nth-child(3),.est li:nth-child(3) path{transition-delay:.7s}
+.est li:nth-child(4),.est li:nth-child(4) path{transition-delay:1.05s}
+
+/* Process: white section, warm grey cards */
+.process{background:#FFFFFF}
+.step{background:var(--soft);border:0}
+.step-n{color:var(--accent-text)}
+.step.end{background:var(--orange)}
+.step.end .btn{background:var(--ink);color:#F5EEE9}
+
+/* FAQ: smaller and calmer */
+.faq{padding-block:clamp(56px,6vw,96px)}
+@media (min-width:901px){ .faq-grid{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)} }
+@media (max-width:900px){ .faq-grid{grid-template-columns:minmax(0,1fr)} }
+.faq-side h2{font-size:clamp(2.25rem,3.6vw,3.5rem)}
+.faq-side .ph{min-height:240px}
+.qa button{font-family:var(--body);font-weight:500;font-size:1.0625rem;line-height:1.4;padding:18px 2px}
+.qa .pm{width:28px;height:28px}
+.qa .pm::before,.qa .pm::after{width:10px}
+.qa-a p{padding:0 40px 20px 2px;font-size:0.9375rem}
+.faq-cta{padding-top:28px}
+.faq-cta p{font-size:1.25rem}
+
+/* Contact: white, photo beside the copy instead of behind it */
+.contact-frame{min-height:0;overflow:visible;border-radius:0;padding:0;grid-template-columns:minmax(0,1fr) minmax(0,480px);gap:clamp(32px,5vw,80px);align-items:stretch;color:var(--ink)}
+.contact-frame::after{display:none}
+.contact-side{display:flex;flex-direction:column;gap:clamp(28px,3vw,40px)}
+.contact-ph{position:relative;border-radius:var(--r-lg);flex:1;min-height:320px}
+.contact-lines{color:var(--ink-soft)}
+.contact-lines a{text-decoration-color:var(--line-strong)}
+.contact-lines small{color:var(--muted)}
+.form{background:var(--soft);border:1px solid var(--line);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink)}
+.field label,.req-note{color:var(--ink-soft)}
+.field input,.field select,.field textarea{background:#FFFFFF;color:var(--ink);border-color:var(--line-strong)}
+.field input::placeholder,.field textarea::placeholder{color:#6B6F71}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(253,96,2,.3)}
+.field .err{color:#B42318}
+.field input[aria-invalid="true"]{border-color:#B42318}
+.form-note{color:var(--muted)}
+.form-done p{color:var(--ink-soft)}
+@media (max-width:900px){
+  .contact-frame{grid-template-columns:1fr;padding-top:0}
+  .contact-ph{flex:none;aspect-ratio:4/3;min-height:0}
+}
+@media (max-width:640px){
+  .nav-bar{height:64px}
+  .card{top:calc(80px + env(safe-area-inset-top,0px))}
+}
+
+/* Logo mark */
+.brand{gap:12px}
+.brand-mark{width:40px;height:40px;flex:none;display:block}
+@media (max-width:640px){ .brand-mark{width:34px;height:34px} }
+
+/* Line drawings of a house behind sections, drawn in as you scroll */
+.has-draw{position:relative;isolation:isolate}
+.has-draw>*:not(.bg-draw){position:relative;z-index:1}
+.process.has-draw>.track{position:relative}
+.bg-draw{position:absolute;left:0;right:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-draw img{display:block;width:min(1700px,118%);height:auto;max-width:none;margin-inline:auto;opacity:.9}
+.draw-why{top:clamp(0px,4vw,60px)}
+.draw-why img{margin-inline:auto -6%}
+.draw-process{top:0}
+.draw-process img{width:min(1500px,105%);margin-inline:auto -4%;opacity:.75}
+.draw-contact{top:0}
+.draw-contact img{margin-inline:-8% auto;opacity:.85}
+@media (max-width:900px){ .bg-draw img{width:180%} }
+.rv-note{font-size:0.8125rem;color:var(--muted);max-width:52ch}
+.review.g .review-body{height:100%}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -430,8 +559,8 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 
 <a class="skip-link" href="#main">Skip to content</a>
 <nav class="nav" id="nav" aria-label="Main">
-  <div class="nav-bar dark">
-    <a class="brand" href="#top" aria-label="Apex Builders home"><svg aria-hidden="true"><use href="#chev"/></svg>APEX BUILDERS</a>
+  <div class="nav-bar">
+    <a class="brand" href="#top" aria-label="Apex Builders home"><img class="brand-mark" src="brand/logo.svg" alt="" width="40" height="40">APEX BUILDERS</a>
     <div class="nav-links">
       <a href="#services">Services</a>
       <a href="#projects">Projects</a>
@@ -446,7 +575,7 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
     </div>
   </div>
 </nav>
-<div class="sheet dark" id="sheet" aria-hidden="true">
+<div class="sheet" id="sheet" aria-hidden="true">
   <a class="big" href="#services">Services</a>
   <a class="big" href="#projects">Projects</a>
   <a class="big" href="#process">Process</a>
@@ -558,49 +687,46 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
     </div>
     <div class="stack" id="stack">
       <article class="card" style="--i:0">
-        <div class="card-inner dark">
+        <div class="card-inner">
           <div class="ph" data-slot="proj-walling" data-parallax><div class="ph-media"></div><div class="ph-label"><b>IMAGE</b><span>Walling Project: hero shot of the finished main living space</span><i>16:9 or wider, landscape</i></div></div>
           <div class="card-info">
             <div><h3>Walling Project</h3></div>
             <dl><dt>Location</dt><dd>Phoenix</dd></dl>
             <dl><dt>Scope</dt><dd>Residential remodel</dd></dl>
-            <a class="btn btn-ghost" href="#contact">Plan one like it <span class="arr">→</span></a>
+            <a class="btn btn-outline" href="#contact">Plan one like it <span class="arr">→</span></a>
           </div>
         </div>
-        <div class="card-dim"></div>
       </article>
       <article class="card" style="--i:1">
-        <div class="card-inner dark">
+        <div class="card-inner">
           <div class="ph" data-slot="proj-prester" data-parallax><div class="ph-media"></div><div class="ph-label"><b>VIDEO</b><span>Prester Project: 8 sec before and after walk through</span><i>16:9, muted loop, plays when the card is in view</i></div></div>
           <div class="card-info">
             <div><h3>Prester Project</h3></div>
             <dl><dt>Location</dt><dd>Phoenix</dd></dl>
             <dl><dt>Scope</dt><dd>Residential remodel</dd></dl>
-            <a class="btn btn-ghost" href="#contact">Plan one like it <span class="arr">→</span></a>
+            <a class="btn btn-outline" href="#contact">Plan one like it <span class="arr">→</span></a>
           </div>
         </div>
-        <div class="card-dim"></div>
       </article>
       <article class="card" style="--i:2">
-        <div class="card-inner dark">
+        <div class="card-inner">
           <div class="ph" data-slot="proj-lps" data-parallax><div class="ph-media"></div><div class="ph-label"><b>IMAGE</b><span>Little Princess Spa: finished interior, wide</span><i>16:9 or wider, landscape</i></div></div>
           <div class="card-info">
             <div><h3>Little Princess Spa</h3></div>
             <dl><dt>Location</dt><dd>Tempe</dd></dl>
             <dl><dt>Scope</dt><dd>Commercial TI</dd></dl>
-            <a class="btn btn-ghost" href="#contact">Plan one like it <span class="arr">→</span></a>
+            <a class="btn btn-outline" href="#contact">Plan one like it <span class="arr">→</span></a>
           </div>
         </div>
-        <div class="card-dim"></div>
       </article>
       <article class="card" style="--i:3">
-        <div class="card-inner dark">
+        <div class="card-inner">
           <div class="ph" data-slot="proj-custom" data-parallax><div class="ph-media"></div><div class="ph-label"><b>IMAGE</b><span>[Custom home project]: exterior at dusk</span><i>16:9 or wider, landscape</i></div></div>
           <div class="card-info">
             <div><h3>[Custom home]</h3></div>
             <dl><dt>Location</dt><dd>[City]</dd></dl>
             <dl><dt>Scope</dt><dd>Custom home build</dd></dl>
-            <a class="btn btn-ghost" href="#contact">Plan one like it <span class="arr">→</span></a>
+            <a class="btn btn-outline" href="#contact">Plan one like it <span class="arr">→</span></a>
           </div>
         </div>
       </article>
@@ -609,7 +735,8 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 </section>
 
 <!-- WHY APEX -->
-<section class="why" aria-labelledby="why-h">
+<section class="why has-draw" aria-labelledby="why-h">
+  <div class="bg-draw draw-why" aria-hidden="true"><img src="bg/house-1.webp" alt="" loading="lazy" decoding="async" width="2000" height="1059"></div>
   <div class="wrap">
     <div class="why-head" data-reveal>
       <span class="eyebrow">Why Apex</span>
@@ -623,8 +750,12 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
         <div class="num" data-count="2016" data-from="2000">2016</div>
         <p>Building and renovating homes in Arizona since 2016, and in the trade here since 2008.</p>
       </div>
-      <div class="cell dark" data-reveal>
-        <div class="tick"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14v9H8l-4 3v-3H3z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+      <div class="cell soft" data-reveal>
+        <div class="tracker" id="tracker" aria-hidden="true">
+          <div class="tr-top"><b>Your project</b><span>6 steps</span></div>
+          <div class="tr-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="tr-step"><span class="tr-n">03</span><span class="tr-name">Budget and design</span></div>
+        </div>
         <h3>You always know what is next</h3>
         <p>One point of contact, regular updates and answers before you have to chase them.</p>
       </div>
@@ -633,8 +764,11 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
         <h3>Raw materials. Clean finish.</h3>
         <p>What is behind the walls matters as much as what you see. We build it right, not just make it look right.</p>
       </div>
-      <div class="cell dark" data-reveal>
-        <div class="tick"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 3h10v14H5zM8 7h4M8 10h4M8 13h2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+      <div class="cell soft" data-reveal>
+        <div class="est" id="estimate" aria-hidden="true">
+          <div class="est-head"><b>Estimate</b><span>In writing</span></div>
+          <ul><li><span>Scope and plans</span><i class="ld"></i><svg viewBox="0 0 20 20"><path d="m4 10.5 4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></li><li><span>Materials and allowances</span><i class="ld"></i><svg viewBox="0 0 20 20"><path d="m4 10.5 4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></li><li><span>Labor and schedule</span><i class="ld"></i><svg viewBox="0 0 20 20"><path d="m4 10.5 4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></li><li><span>Possible changes</span><i class="ld"></i><svg viewBox="0 0 20 20"><path d="m4 10.5 4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></li></ul>
+        </div>
         <h3>Clear, detailed estimates</h3>
         <p>Every job is quoted in writing. Allowances and possible changes are explained before work starts.</p>
       </div>
@@ -643,7 +777,8 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 </section>
 
 <!-- PROCESS -->
-<section class="process dark" id="process" aria-labelledby="proc-h">
+<section class="process has-draw" id="process" aria-labelledby="proc-h">
+  <div class="bg-draw draw-process" aria-hidden="true"><img src="bg/house-3.webp" alt="" loading="lazy" decoding="async" width="2000" height="1059"></div>
   <div class="wrap process-head" data-reveal>
     <span class="eyebrow">How it works</span>
     <h2 id="proc-h">From first call<br>to final walkthrough</h2>
@@ -742,21 +877,15 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
       <div class="qa open"><button type="button" aria-expanded="true"><span>What happens after I call?</span><span class="pm" aria-hidden="true"></span></button>
         <div class="qa-a"><div><p>We take down your details and schedule a site walk. The day before, we text or call to confirm the time still works for you.</p></div></div></div>
       <div class="qa"><button type="button" aria-expanded="false"><span>How do you price the work?</span><span class="pm" aria-hidden="true"></span></button>
-        <div class="qa-a"><div><p>We quote every job. After the site walk you get a detailed proposal to review against your budget. Once our subs and crew walk the job, we send updated pricing for approval.</p></div></div></div>
-      <div class="qa"><button type="button" aria-expanded="false"><span>Will my project finish on time?</span><span class="pm" aria-hidden="true"></span></button>
-        <div class="qa-a"><div><p>You get a schedule and a start date before work begins, and updates the whole way. Delays can happen, and when they do you hear it from us first, with a plan.</p></div></div></div>
-      <div class="qa"><button type="button" aria-expanded="false"><span>Why not go with the lowest bid?</span><span class="pm" aria-hidden="true"></span></button>
-        <div class="qa-a"><div><p>Unusually low bids often leave out costs, use cheaper materials or skip steps that turn into expensive repairs later. The cheapest estimate is rarely the best value.</p></div></div></div>
-      <div class="qa"><button type="button" aria-expanded="false"><span>Can the final price change?</span><span class="pm" aria-hidden="true"></span></button>
-        <div class="qa-a"><div><p>Hidden conditions, material selections and design changes can affect cost. We walk you through those possibilities up front, so nothing shows up as a surprise.</p></div></div></div>
+        <div class="qa-a"><div><p>We quote every job in writing. After the site walk you get a detailed proposal to review against your budget. Hidden conditions, selections and design changes can affect cost, so we walk you through those up front. Once our subs and crew walk the job, we send final pricing for approval.</p></div></div></div>
       <div class="qa"><button type="button" aria-expanded="false"><span>What does a project typically cost?</span><span class="pm" aria-hidden="true"></span></button>
         <div class="qa-a"><div><p>It depends on scope, size and finishes. Many of our remodel clients invest between $100,000 and $500,000, and custom homes run higher. Every job gets a written quote after a site walk.</p></div></div></div>
+      <div class="qa"><button type="button" aria-expanded="false"><span>Will my project finish on time?</span><span class="pm" aria-hidden="true"></span></button>
+        <div class="qa-a"><div><p>You get a schedule and a start date before work begins, and updates the whole way. Delays can happen, and when they do you hear it from us first, with a plan.</p></div></div></div>
       <div class="qa"><button type="button" aria-expanded="false"><span>Do you handle the design too?</span><span class="pm" aria-hidden="true"></span></button>
         <div class="qa-a"><div><p>Yes. As a design build firm we take your project from plans and selections through construction, with one team and one point of contact.</p></div></div></div>
-      <div class="qa"><button type="button" aria-expanded="false"><span>What areas do you serve?</span><span class="pm" aria-hidden="true"></span></button>
-        <div class="qa-a"><div><p>Paradise Valley, Scottsdale, Phoenix and 15 more cities across the Valley. For the right project we travel 100+ miles.</p></div></div></div>
       <div class="qa"><button type="button" aria-expanded="false"><span>Are you licensed and insured?</span><span class="pm" aria-hidden="true"></span></button>
-        <div class="qa-a"><div><p>Yes. Apex Builders is licensed, bonded and insured under ROC #350402.</p></div></div></div>
+        <div class="qa-a"><div><p>Yes. Apex Builders is licensed, bonded and insured under ROC #350402. We work across 18 cities in the Valley and travel 100+ miles for the right project.</p></div></div></div>
       <div class="faq-cta"><p>Still have a question?</p><a class="btn btn-primary" href="tel:+16023451071">Call 602.345.1071</a></div>
     </div>
   </div>
@@ -764,9 +893,10 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 </div>
 
 <!-- CONTACT -->
-<section class="contact" id="contact" aria-labelledby="contact-h">
-  <div class="contact-frame dark">
-    <div class="ph" data-slot="contact" data-parallax><div class="ph-media"></div><div class="ph-label"><b>IMAGE</b><span>Finished home exterior at blue hour, wide</span><i>16:9, darker exposure for text</i></div></div>
+<section class="contact has-draw" id="contact" aria-labelledby="contact-h">
+  <div class="bg-draw draw-contact" aria-hidden="true"><img src="bg/house-2.webp" alt="" loading="lazy" decoding="async" width="2000" height="1059"></div>
+  <div class="contact-frame">
+    <div class="contact-side">
     <div class="contact-copy">
       <h2 id="contact-h" data-reveal>Let’s talk about your project</h2>
       <a class="phone" href="tel:+16023451071" data-reveal>602.345.1071</a>
@@ -775,6 +905,8 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
         <span>2225 W Pecos Rd, Suite 2, Chandler, AZ 85224</span>
         <small>Or comment BUILD on Instagram <a href="https://www.instagram.com/apexbuildersaz/" target="_blank" rel="noopener">@apexbuildersaz<span class="sr-only"> (opens in a new tab)</span></a></small>
       </div>
+    </div>
+    <div class="ph contact-ph" data-slot="contact" data-parallax><div class="ph-media"></div><div class="ph-label"><b>IMAGE</b><span>Finished home exterior or interior, wide</span><i>4:3 or wider</i></div></div>
     </div>
     <form class="form" id="quoteForm" novalidate>
       <div id="formFields" style="display:flex;flex-direction:column;gap:16px">
@@ -808,7 +940,7 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 <footer class="dark">
   <div class="wrap">
     <div class="foot-grid">
-      <div><a class="brand" href="#top"><svg aria-hidden="true"><use href="#chev"/></svg>APEX BUILDERS</a><p style="margin-top:14px">Custom homes, renovations, design build and commercial TI across the Valley since 2016.</p></div>
+      <div><a class="brand" href="#top"><img class="brand-mark" src="brand/logo.svg" alt="" width="40" height="40">APEX BUILDERS</a><p style="margin-top:14px">Custom homes, renovations, design build and commercial TI across the Valley since 2016.</p></div>
       <div><h2>Services</h2><ul><li><a href="#services">Custom home building</a></li><li><a href="#services">Custom renovations</a></li><li><a href="#services">Design build</a></li><li><a href="#services">Commercial and TI</a></li></ul></div>
       <div><h2>Company</h2><ul><li><a href="#projects">Projects</a></li><li><a href="#process">Process</a></li><li><a href="#about">About</a></li><li><a href="#faq">FAQ</a></li></ul></div>
       <div><h2>Contact</h2><ul><li><a href="tel:+16023451071">602.345.1071</a></li><li><a href="mailto:info@apexbuildaz.com">info@apexbuildaz.com</a></li><li>Chandler, AZ 85224</li><li><a href="https://www.instagram.com/apexbuildersaz/" target="_blank" rel="noopener">@apexbuildersaz<span class="sr-only"> (opens in a new tab)</span></a></li></ul></div>
@@ -945,6 +1077,37 @@ function boot(){
     addEventListener('resize', () => { const {min} = bounds(); if(x < min) set(min); });
   })();
 
+  /* ---------- Favicon (the published page has no head of its own) ---------- */
+  if(!document.querySelector('link[rel="icon"]')){
+    const l = document.createElement('link'); l.rel = 'icon'; l.type = 'image/png'; l.href = 'brand/favicon-32.png'; document.head.appendChild(l);
+    const a = document.createElement('link'); a.rel = 'apple-touch-icon'; a.href = 'brand/favicon-180.png'; document.head.appendChild(a);
+  }
+
+  /* ---------- Nav turns white once the hero is behind it ---------- */
+  const navBar = $('#nav'), heroEl = $('.hero');
+  const navSolid = () => navBar.classList.toggle('solid', scrollY > heroEl.offsetHeight - 90);
+  addEventListener('scroll', navSolid, { passive:true }); navSolid();
+
+  /* ---------- Bento widgets: project tracker and estimate checklist ---------- */
+  (function(){
+    const STEPS = ['Call or referral','Walk the site','Budget and design','Proposal for review','Pricing locked','Build and hand over'];
+    const tr = $('#tracker'), est = $('#estimate');
+    if(tr){
+      const bars = $$('.tr-bars i', tr), n = $('.tr-n', tr), name = $('.tr-name', tr), row = $('.tr-step', tr);
+      let k = 2, timer = null;
+      const show = j => { bars.forEach((b, x) => b.classList.toggle('on', x <= j)); n.textContent = String(j + 1).padStart(2, '0'); name.textContent = STEPS[j]; };
+      show(k);
+      if(!reduce){
+        const tick = () => { k = (k + 1) % STEPS.length; row.classList.add('out'); setTimeout(() => { show(k); row.classList.remove('out'); }, 250); };
+        new IntersectionObserver(([e]) => { clearInterval(timer); if(e.isIntersecting) timer = setInterval(tick, 2200); }, { threshold:.4 }).observe(tr);
+      }
+    }
+    if(est){
+      if(reduce) est.classList.add('play');
+      else new IntersectionObserver(([e]) => est.classList.toggle('play', e.isIntersecting), { threshold:.5 }).observe(est);
+    }
+  })();
+
   /* ---------- Marquee content duplication ---------- */
   const mq = $('#marquee'); mq.appendChild(mq.firstElementChild.cloneNode(true));
 
@@ -1008,13 +1171,21 @@ function boot(){
   });
   gsap.to('#heroFrame .ph-media', { yPercent:10, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true } });
 
+  /* ---------- House drawings: wipe in from the left, drift slower than the page ---------- */
+  $$('.bg-draw').forEach(d => {
+    const img = $('img', d), sec = d.parentElement;
+    gsap.fromTo(img, { clipPath:'inset(0 100% 0 0)' }, { clipPath:'inset(0 0% 0 0)', ease:'none',
+      scrollTrigger:{ trigger:sec, start:'top 85%', end:'top 15%', scrub:true } });
+    gsap.fromTo(d, { yPercent:-6 }, { yPercent:8, ease:'none',
+      scrollTrigger:{ trigger:sec, start:'top bottom', end:'bottom top', scrub:true } });
+  });
+
   /* ---------- Projects: sticky stack, earlier cards sink back ---------- */
   const cards = $$('#stack .card');
   cards.forEach((c, i) => {
     const next = cards[i+1]; if(!next) return;
-    const st = { trigger:next, start:'top bottom', end:`top ${96 + (i+1)*14}px`, scrub:true };
-    gsap.to($('.card-inner', c), { scale:.93 - (cards.length - i) * .006, ease:'none', scrollTrigger:st });
-    gsap.to($('.card-dim', c), { opacity:.55, ease:'none', scrollTrigger:{ ...st } });
+    const st = { trigger:next, start:'top bottom', end:'top 100px', scrub:true };
+    gsap.to($('.card-inner', c), { scale:.94, ease:'none', scrollTrigger:st });
   });
 
   /* ---------- Counter ---------- */
@@ -1274,6 +1445,7 @@ function boot(){
       const d = await r.json();
       if(d.url) $('#gLink').href = d.url;
       if(d.rating && d.total) $('#gSummary').textContent = d.rating.toFixed(1) + ' stars from ' + d.total + ' Google reviews';
+      if(d.placeholder){ const n = document.createElement('p'); n.className = 'rv-note'; n.textContent = 'Placeholder: these are ' + d.placeholder + ' reviews from Google, shown until the Apex Builders profile is connected.'; $('#gLink').after(n); }
       if(!d.reviews || !d.reviews.length) return;
       const star = '<svg aria-hidden="true"><use href="#star"/></svg>';
       $('#rvTrack').innerHTML = d.reviews.map(v => '<article class="review g"><div class="review-body"><div class="stars" role="img" aria-label="' + v.rating + ' out of 5 stars">' + star.repeat(Math.round(v.rating)) + '</div><q>' + esc(v.text) + '</q><div class="review-g">' + (v.photo ? '<img src="' + esc(v.photo) + '" alt="" referrerpolicy="no-referrer">' : '') + '<div><b>' + esc(v.author) + '</b><small>' + esc(v.when || '') + ' on Google</small></div></div></div></article>').join('');
