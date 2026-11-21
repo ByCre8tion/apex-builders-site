@@ -98,15 +98,9 @@ p{margin:0;text-wrap:pretty}
 .nav-phone{font-size:0.90625rem;color:var(--text-2);user-select:all}
 .nav .btn{height:44px;padding:0 18px;font-size:0.875rem}
 .menu-btn{display:none;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center}
-.menu-btn span{display:block;width:20px;height:1.5px;background:var(--text);position:relative}
-.menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:20px;height:1.5px;background:var(--text);transition:transform .5s var(--ease)}
-.menu-btn span::before{top:-6px}.menu-btn span::after{top:6px}
 .sheet{position:fixed;inset:0;z-index:45;background:rgba(17,19,20,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:calc(110px + env(safe-area-inset-top,0px)) var(--gut-r) 40px var(--gut);display:flex;flex-direction:column;gap:6px;overflow-y:auto;overscroll-behavior:contain;transform:translateY(-100%);transition:transform .45s var(--ease),visibility 0s linear .45s;visibility:hidden}
 .sheet a.big{font-family:var(--display);font-weight:700;font-size:3rem;text-transform:uppercase;line-height:1.1}
 .menu-open .sheet{transform:none;visibility:visible;transition:transform .7s var(--ease),visibility 0s}
-.menu-open .menu-btn span{background:transparent}
-.menu-open .menu-btn span::before{transform:translateY(6px) rotate(45deg)}
-.menu-open .menu-btn span::after{transform:translateY(-6px) rotate(-45deg)}
 
 /* Hero */
 .hero{padding:0;background:var(--bg)}
@@ -430,8 +424,6 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 .nav-links a:focus-visible::after{transform:none}
 .nav-phone{color:inherit;font-weight:500;font-variant-numeric:tabular-nums}
 .nav .btn{height:42px;border-radius:999px;padding:0 20px}
-.menu-btn span,.menu-btn span::before,.menu-btn span::after{background:currentColor}
-.menu-open .menu-btn span{background:transparent}
 .sheet{background:#FFFFFF;color:var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none;padding-top:calc(104px + env(safe-area-inset-top,0px))}
 .sheet a.big{border-bottom:1px solid var(--line);padding-block:6px}
 .hero-frame::before{content:"";position:absolute;inset:0 0 auto;height:180px;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(17,19,20,.55),rgba(17,19,20,0))}
@@ -543,6 +535,50 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
 @media (max-width:900px){ .bg-draw img{width:180%} }
 .rv-note{font-size:0.8125rem;color:var(--muted);max-width:52ch}
 .review.g .review-body{height:100%}
+
+/* ===== Phase 3: architectural nav, flat project cards, steadier phones ===== */
+html,body{overflow-x:clip}
+.hero-frame{min-height:max(620px,100svh)}
+.process{min-height:100svh}
+.card{height:min(72svh,700px)}
+
+/* Nav: small tracked labels, hairline instead of a box */
+.nav-bar{height:72px;gap:32px}
+.brand{gap:12px;font-family:var(--body);font-weight:600;font-size:0.8125rem;letter-spacing:.2em}
+.brand-mark{width:38px;height:38px}
+.nav-links{gap:0;margin-inline:auto}
+.nav-links a{padding:10px 16px;font-size:0.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.nav-links a::after{left:16px;right:16px;bottom:5px}
+.nav-right{gap:22px}
+.nav-phone{font-size:0.875rem;letter-spacing:.02em}
+.nav .btn{height:40px;border-radius:2px;padding:0 18px;font-size:0.75rem;letter-spacing:.16em;text-transform:uppercase}
+.nav .btn-primary{background:transparent;color:inherit;border:1px solid currentColor}
+.nav.solid .btn-primary,.menu-open .nav .btn-primary{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+@media (hover:hover){
+  .nav .btn-primary:hover{background:#FFFFFF;border-color:#FFFFFF;color:var(--ink)}
+  .nav.solid .btn-primary:hover{background:var(--orange);border-color:var(--orange);color:var(--ink)}
+}
+.menu-btn{width:auto;min-height:44px;padding:0 2px;gap:12px;border-radius:0;font-size:0.75rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+.mb-icon{position:relative;display:block;width:22px;height:8px}
+.mb-icon::before,.mb-icon::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:currentColor;transition:transform .3s ease-out}
+.mb-icon::before{top:0}.mb-icon::after{bottom:0}
+.menu-open .mb-icon::before{transform:translateY(3.25px) rotate(45deg)}
+.menu-open .mb-icon::after{transform:translateY(-3.25px) rotate(-45deg)}
+.sheet{gap:0;padding-top:calc(96px + env(safe-area-inset-top,0px))}
+.sheet a.big{display:flex;align-items:baseline;gap:18px;padding-block:14px;font-size:clamp(2.5rem,11vw,3.5rem);line-height:1}
+.sheet a.big .n{font-family:var(--body);font-size:0.75rem;font-weight:500;letter-spacing:.16em;color:var(--muted)}
+.sheet-foot{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:auto;padding-top:32px;font-size:0.9375rem;color:var(--ink-soft)}
+.sheet-foot .btn{margin-bottom:8px;border-radius:2px}
+
+/* Projects: no borders, no shadows, just the photo and a ruled caption */
+.card-inner{border:0;box-shadow:none;border-radius:0;background:#FFFFFF;overflow:visible}
+.card .ph{border-radius:var(--r-lg)}
+.card-info{padding:22px 4px 20px;border-bottom:1px solid var(--line)}
+.card-info .btn{border-radius:2px}
+@media (max-width:640px){
+  .stack{gap:56px}
+  .card{position:relative;top:auto;height:auto}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -571,17 +607,21 @@ footer{padding:clamp(60px,7vw,100px) 0 0;overflow:hidden;background:var(--bg)}
     <div class="nav-right">
       <a class="nav-phone" href="tel:+16023451071">602.345.1071</a>
       <a class="btn btn-primary" href="#contact">Get a quote</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span></button>
+      <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="sheet"><span class="mb-label">Menu</span><span class="mb-icon" aria-hidden="true"></span></button>
     </div>
   </div>
 </nav>
 <div class="sheet" id="sheet" aria-hidden="true">
-  <a class="big" href="#services">Services</a>
-  <a class="big" href="#projects">Projects</a>
-  <a class="big" href="#process">Process</a>
-  <a class="big" href="#about">About</a>
-  <a class="big" href="#faq">FAQ</a>
-  <a class="btn btn-primary" href="#contact" style="margin-top:24px;align-self:flex-start">Get a quote</a>
+  <a class="big" href="#services"><span class="n">01</span>Services</a>
+  <a class="big" href="#projects"><span class="n">02</span>Projects</a>
+  <a class="big" href="#process"><span class="n">03</span>Process</a>
+  <a class="big" href="#about"><span class="n">04</span>About</a>
+  <a class="big" href="#faq"><span class="n">05</span>FAQ</a>
+  <div class="sheet-foot">
+    <a class="btn btn-primary" href="#contact">Get a quote</a>
+    <a href="tel:+16023451071">602.345.1071</a>
+    <a href="mailto:info@apexbuildaz.com">info@apexbuildaz.com</a>
+  </div>
 </div>
 
 <main id="top">
@@ -982,7 +1022,7 @@ function boot(){
   const behind = [$('main'), $('footer'), $('.skip-link')];
   function setMenu(open, refocus){
     document.body.classList.toggle('menu-open', open);
-    menuBtn.setAttribute('aria-expanded', open); menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menuBtn.setAttribute('aria-expanded', open); $('.mb-label', menuBtn).textContent = open ? 'Close' : 'Menu';
     sheet.setAttribute('aria-hidden', !open);
     behind.forEach(el => el && (el.inert = open));
     if(window.__lenis){ open ? __lenis.stop() : __lenis.start(); }
@@ -1118,9 +1158,11 @@ function boot(){
 
   if(!window.gsap || !window.ScrollTrigger || reduce) return;
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize:true });
+  const touch = matchMedia('(pointer: coarse)').matches, small = touch || matchMedia('(max-width: 900px)').matches;
 
   /* ---------- Smooth scroll ---------- */
-  if(window.Lenis){
+  if(window.Lenis && !touch){
     const lenis = new Lenis({ lerp:.09, smoothWheel:true });
     window.__lenis = lenis;
     lenis.on('scroll', ScrollTrigger.update);
@@ -1137,7 +1179,7 @@ function boot(){
   /* ---------- Nav hide on scroll down, show on scroll up ---------- */
   const nav = $('#nav');
   ScrollTrigger.create({ start:0, end:'max', onUpdate:self => {
-    nav.classList.toggle('is-hidden', self.direction === 1 && self.scroll() > 240 && !document.body.classList.contains('menu-open') && !nav.contains(document.activeElement));
+    nav.classList.toggle('is-hidden', !small && self.direction === 1 && self.scroll() > 240 && !document.body.classList.contains('menu-open') && !nav.contains(document.activeElement));
   }});
 
   /* ---------- Hero intro ---------- */
@@ -1149,7 +1191,7 @@ function boot(){
     .from('.nav-bar', { y:-20, opacity:0, duration:1 }, .5);
 
   /* ---------- Hero recedes on scroll ---------- */
-  gsap.to('.hero-content', { y:-90, opacity:.15, ease:'none',
+  if(!small) gsap.to('.hero-content', { y:-90, opacity:.15, ease:'none',
     scrollTrigger:{ trigger:'.hero', start:'top top', end:'70% top', scrub:true } });
 
   /* ---------- Statement: words light up as you read ---------- */
@@ -1165,14 +1207,14 @@ function boot(){
     onEnter: els => gsap.from(els, { y:40, opacity:0, duration:1.2, ease:'expo.out', stagger:.08, overwrite:true }) });
 
   /* ---------- Parallax inside media frames ---------- */
-  $$('[data-parallax]').forEach(f => {
+  if(!small) $$('[data-parallax]').forEach(f => {
     const m = $('.ph-media', f); if(!m || f.closest('.hero')) return;
     gsap.fromTo(m, { yPercent:-6 }, { yPercent:6, ease:'none', scrollTrigger:{ trigger:f, start:'top bottom', end:'bottom top', scrub:true } });
   });
-  gsap.to('#heroFrame .ph-media', { yPercent:10, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true } });
+  if(!small) gsap.to('#heroFrame .ph-media', { yPercent:10, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true } });
 
   /* ---------- House drawings: wipe in from the left, drift slower than the page ---------- */
-  $$('.bg-draw').forEach(d => {
+  if(!small) $$('.bg-draw').forEach(d => {
     const img = $('img', d), sec = d.parentElement;
     gsap.fromTo(img, { clipPath:'inset(0 100% 0 0)' }, { clipPath:'inset(0 0% 0 0)', ease:'none',
       scrollTrigger:{ trigger:sec, start:'top 85%', end:'top 15%', scrub:true } });
@@ -1182,7 +1224,7 @@ function boot(){
 
   /* ---------- Projects: sticky stack, earlier cards sink back ---------- */
   const cards = $$('#stack .card');
-  cards.forEach((c, i) => {
+  if(!small) cards.forEach((c, i) => {
     const next = cards[i+1]; if(!next) return;
     const st = { trigger:next, start:'top bottom', end:'top 100px', scrub:true };
     gsap.to($('.card-inner', c), { scale:.94, ease:'none', scrollTrigger:st });
