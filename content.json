@@ -1,0 +1,143 @@
+{
+ "text": {},
+ "media": {
+  "m0": {
+   "id": "60518a43f8ef053753318bda54163982",
+   "kind": "image",
+   "o": "Hero loop: slow drone push toward a finished Apex custom home at dusk, lights on#0",
+   "file": "media/60518a43f8ef053753318bda54163982.webp"
+  },
+  "m1": {
+   "id": "59862b4410645af96a181ea513eb1a37",
+   "kind": "image",
+   "o": "#1",
+   "file": "media/59862b4410645af96a181ea513eb1a37.webp"
+  },
+  "m2": {
+   "id": "ea57264089236f38acaed36598539216",
+   "kind": "image",
+   "o": "Finished custom home exterior, golden hour#2",
+   "file": "media/ea57264089236f38acaed36598539216.webp"
+  },
+  "m3": {
+   "id": "e84e26ba19408943402e21372da3215f",
+   "kind": "image",
+   "o": "Remodeled kitchen, wide shot with island#3",
+   "file": "media/e84e26ba19408943402e21372da3215f.webp"
+  },
+  "m4": {
+   "id": "15b01b67fe09ec27059fb8d6f67a7bb5",
+   "kind": "image",
+   "o": "Jason reviewing plans with clients on site#4",
+   "file": "media/15b01b67fe09ec27059fb8d6f67a7bb5.webp"
+  },
+  "m5": {
+   "id": "da95e24df8e50f5d673a725f6389c035",
+   "kind": "image",
+   "o": "Little Princess Spa interior, finished space#5",
+   "file": "media/da95e24df8e50f5d673a725f6389c035.webp"
+  },
+  "m10": {
+   "id": "9dd42dcfa808ebd4e4548ffa2230da05",
+   "kind": "video",
+   "o": "Behind the scenes: crew framing, Jason walking the site, detail work close up#10",
+   "file": "media/9dd42dcfa808ebd4e4548ffa2230da05.mp4"
+  },
+  "m11": {
+   "id": "b58a45bdedeb128728d84c0b0f343110",
+   "kind": "image",
+   "o": "Office phone call or Jason on a call#11",
+   "file": "media/b58a45bdedeb128728d84c0b0f343110.webp"
+  },
+  "m12": {
+   "id": "019c551a376e47e3e6e5cca11eda1733",
+   "kind": "image",
+   "o": "Site walk with homeowners#12",
+   "file": "media/019c551a376e47e3e6e5cca11eda1733.webp"
+  },
+  "m13": {
+   "id": "832d54db205c1d60b6883176182d5bf6",
+   "kind": "image",
+   "o": "Plans and finish samples on a table#13",
+   "file": "media/832d54db205c1d60b6883176182d5bf6.webp"
+  },
+  "m14": {
+   "id": "3e33c4b0ab7404684f6b8cef08ba36bb",
+   "kind": "image",
+   "o": "Proposal document close up#14",
+   "file": "media/3e33c4b0ab7404684f6b8cef08ba36bb.webp"
+  },
+  "m15": {
+   "id": "a2cb914ae64791c378dea1c5ef1568cb",
+   "kind": "image",
+   "o": "Subs and crew walking the job together#15",
+   "file": "media/a2cb914ae64791c378dea1c5ef1568cb.webp"
+  },
+  "m16": {
+   "id": "2d3185a01caa20e07c5dc9941857aada",
+   "kind": "image",
+   "o": "Key handoff moment, client reaction#16",
+   "file": "media/2d3185a01caa20e07c5dc9941857aada.webp"
+  },
+  "m19": {
+   "id": "888a859ae0786285a13ab811cb26a6d2",
+   "kind": "image",
+   "o": "Finish carpentry close up#19",
+   "file": "media/888a859ae0786285a13ab811cb26a6d2.webp"
+  },
+  "m18": {
+   "id": "7b36a56120b7356d690b59a0f675d4ef",
+   "kind": "image",
+   "o": "Apex crew group photo#18",
+   "file": "media/7b36a56120b7356d690b59a0f675d4ef.webp"
+  },
+  "m17": {
+   "id": "6a86831420b5ffcd3c7e690d70ab75dc",
+   "kind": "image",
+   "o": "Portrait of Jason on an active job site, natural light#17",
+   "file": "media/6a86831420b5ffcd3c7e690d70ab75dc.webp"
+  },
+  "m20": {
+   "id": "069312cd8200fbaf6ce1c7f320c41522",
+   "kind": "image",
+   "o": "Team dinner or company get together#20",
+   "file": "media/069312cd8200fbaf6ce1c7f320c41522.webp"
+  },
+  "m26": {
+   "id": "1de5ee6ff9056e1d9bcd7e03fc2218e8",
+   "kind": "image",
+   "o": "Finished home exterior at blue hour, wide#26",
+   "file": "media/1de5ee6ff9056e1d9bcd7e03fc2218e8.webp"
+  },
+  "m25": {
+   "id": "93ee2549ff04582d4e3cf99e7af8f7fc",
+   "kind": "image",
+   "o": "Finished bathroom or kitchen detail shot#25",
+   "file": "media/93ee2549ff04582d4e3cf99e7af8f7fc.webp"
+  },
+  "m6": {
+   "id": "7706df6b07cad3a40d61b73d6f4f354c",
+   "kind": "image",
+   "o": "Walling Project: hero shot of the finished main living space#6",
+   "file": "media/7706df6b07cad3a40d61b73d6f4f354c.webp"
+  },
+  "m7": {
+   "id": "c2dda6d78e7c98a6a34c2949c1da0029",
+   "kind": "image",
+   "o": "Prester Project: 8 sec before and after walk through#7",
+   "file": "media/c2dda6d78e7c98a6a34c2949c1da0029.webp"
+  },
+  "m8": {
+   "id": "feaba7f9557e5584240d11ce7d4ed08c",
+   "kind": "image",
+   "o": "Little Princess Spa: finished interior, wide#8",
+   "file": "media/feaba7f9557e5584240d11ce7d4ed08c.webp"
+  },
+  "m9": {
+   "id": "4f37334c0a089615a86cd865fc34bba0",
+   "kind": "image",
+   "o": "[Custom home project]: exterior at dusk#9",
+   "file": "media/4f37334c0a089615a86cd865fc34bba0.webp"
+  }
+ }
+}
