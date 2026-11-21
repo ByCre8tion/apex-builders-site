@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Label from '../components/Label.astro';
+import Ph from '../components/Ph.astro';
+import { roles, perks } from '../data/site';
+---
+<Base title="Careers | Apex Builders" description="Join the Apex Builders crew. Open roles for trades and project managers across the Phoenix Valley." current="careers.html">
+  <PageHeader n="07" label="Careers" title="Build with us" edit="careers" lead="We are always looking for skilled people who take pride in their work and like doing it once, properly." photo="careers-hero" imgLabel="Crew at work on site" />
+  <section class="section" aria-labelledby="perks-h">
+    <div class="wrap">
+      <div class="head" data-reveal><Label n="01" text="Why Apex" /><h2 id="perks-h" data-edit="perks-title">Why people stay</h2></div>
+      <div class="values">{perks.map((v, i) => <div class="value" data-reveal><span class="value-n">{String(i + 1).padStart(2, '0')}</span><h3 data-edit={`perk-${i}-t`}>{v.title}</h3><p data-edit={`perk-${i}-p`}>{v.text}</p></div>)}</div>
+    </div>
+  </section>
+  <section class="section chalk" aria-labelledby="roles-h">
+    <div class="wrap">
+      <div class="head" data-reveal><Label n="02" text="Open roles" /><h2 id="roles-h" data-edit="roles-title">Open roles</h2></div>
+      <div class="roles">
+        {roles.map((r, i) => (
+          <article class="role" data-reveal>
+            <div><h3 data-edit={`role-${i}-t`}>{r.title}</h3><p data-edit={`role-${i}-p`}>{r.text}</p></div>
+            <dl><div><dt>Type</dt><dd data-edit={`role-${i}-type`}>{r.type}</dd></div><div><dt>Where</dt><dd data-edit={`role-${i}-where`}>{r.where}</dd></div></dl>
+            <a class="btn btn-outline" href="#apply">Apply <span class="arr" aria-hidden="true">→</span></a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section" id="apply" aria-labelledby="apply-h">
+    <div class="wrap apply-grid">
+      <div class="apply-copy"><Label n="03" text="Apply" /><h2 id="apply-h" data-edit="apply-title">Tell us about you</h2><p class="lead" data-edit="apply-lead">Send your details and the kind of work you do. We will call you back.</p><Ph slot="careers-2" class="apply-ph" alt="" label="Crew or job site photo" spec="4:3" /></div>
+      <form class="form" id="applyForm" novalidate data-validate>
+        <div class="form-fields">
+          <h3>Application</h3>
+          <p class="req-note">Fields marked * are required.</p>
+          <div class="row2">
+            <div class="field"><label for="a-name">Full name <span aria-hidden="true">*</span></label><input id="a-name" name="name" autocomplete="name" required aria-describedby="e-a-name" data-msg="Add your name." /><span class="err" id="e-a-name"></span></div>
+            <div class="field"><label for="a-phone">Phone <span aria-hidden="true">*</span></label><input id="a-phone" name="phone" type="tel" autocomplete="tel" required aria-describedby="e-a-phone" data-msg="Add a 10 digit phone number so we can call you back." /><span class="err" id="e-a-phone"></span></div>
+          </div>
+          <div class="field"><label for="a-email">Email</label><input id="a-email" name="email" type="email" autocomplete="email" spellcheck="false" /></div>
+          <div class="row2">
+            <div class="field"><label for="a-role">Role</label><select id="a-role" name="role"><option>Any open role</option>{roles.map((r) => <option>{r.title}</option>)}</select></div>
+            <div class="field"><label for="a-years">Years in the trade</label><select id="a-years" name="years"><option>Less than 2</option><option>2 to 5</option><option>5 to 10</option><option>More than 10</option></select></div>
+          </div>
+          <div class="field"><label for="a-msg">Your trade and experience</label><textarea id="a-msg" name="msg" rows="4" placeholder="Framing, finish carpentry, project management…"></textarea></div>
+          <button class="btn btn-primary" type="submit">Send application <span class="arr" aria-hidden="true">→</span></button>
+        </div>
+        <div class="form-done" hidden><h3 tabindex="-1">Application received</h3><p>Thanks. We will call you to talk about the role.</p></div>
+      </form>
+    </div>
+  </section>
+</Base>
+<style is:global>
+.roles{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
+.role{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:20px 40px;align-items:center;padding:28px 0;border-bottom:1px solid var(--rule)}
+.role p{color:var(--ink-2);margin-top:8px;max-width:56ch}
+.role dl{margin:0;display:flex;gap:32px}
+.role dt{font-size:0.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.role dd{margin:4px 0 0;font-weight:500}
+.apply-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:clamp(32px,6vw,112px);align-items:start}
+.apply-copy{display:flex;flex-direction:column;gap:22px}
+.apply-ph{aspect-ratio:4/3;margin-top:12px}
+@media (max-width:900px){ .role,.apply-grid{grid-template-columns:minmax(0,1fr)} .role .btn{justify-self:start} }
+</style>

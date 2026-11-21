@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Ph from '../components/Ph.astro';
+import Label from '../components/Label.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Process from '../components/Process.astro';
+import { services, allProjects } from '../data/site';
+const related = { 'custom-homes': 'custom-home', renovations: 'walling', 'design-build': 'prester', commercial: 'little-princess-spa' } as Record<string, string>;
+---
+<Base title="Services | Apex Builders" description="Custom homes, renovations, design build and commercial TI across the Phoenix Valley." current="services.html">
+  <PageHeader n="01" label="Services" title="What we build" edit="services" lead="One team from first sketch to final walkthrough. Pick the kind of project you have in mind and see how we handle it." />
+  <nav class="wrap svc-index" aria-label="Services on this page">
+    {services.map((s, i) => <a href={`#${s.slug}`}><span>{String(i + 1).padStart(2, '0')}</span>{s.title}</a>)}
+  </nav>
+  {services.map((s, i) => {
+    const p = allProjects.find((x) => x.slug === related[s.slug]);
+    return (
+      <section class:list={['svc-block', 'section', { chalk: i % 2 === 1 }]} id={s.slug} aria-labelledby={`${s.slug}-h`}>
+        <div class:list={['wrap', 'svc-grid', { flip: i % 2 === 1 }]}>
+          <Ph slot={`svcp-${s.slug}`} class="svc-ph" parallax alt="" label={`${s.title}: hero photo`} spec="4:5, vertical" />
+          <div class="svc-copy" data-reveal>
+            <Label n={String(i + 1).padStart(2, '0')} text="Service" />
+            <h2 id={`${s.slug}-h`} data-edit={`svcp-${s.slug}-t`}>{s.title}</h2>
+            <p class="lead" data-edit={`svcp-${s.slug}-p`}>{s.text}</p>
+            <h3 class="svc-sub">What is included</h3>
+            <ul class="ticks">{s.includes.map((t, j) => <li data-edit={`svcp-${s.slug}-i${j}`}>{t}</li>)}</ul>
+            <div class="svc-actions">
+              <a class="btn btn-primary" href="contact.html">Get a quote <span class="arr" aria-hidden="true">→</span></a>
+              {p && <a class="link" href={`project-${p.slug}.html`}>See {p.title} <span class="arr" aria-hidden="true">→</span></a>}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  })}
+  <Process />
+  <CtaBand edit="svc-cta" />
+</Base>
+<style is:global>
+.svc-index{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.svc-index a{display:flex;gap:14px;align-items:baseline;padding:20px 16px 20px 0;font-weight:500}
+.svc-index a+a{padding-left:16px;border-left:1px solid var(--rule)}
+.svc-index span{font-size:0.75rem;letter-spacing:.16em;color:var(--muted)}
+@media (hover:hover){ .svc-index a:hover{color:var(--ember)} }
+.svc-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,112px);align-items:center}
+.svc-grid.flip .svc-ph{order:2}
+.svc-ph{aspect-ratio:4/5}
+.svc-copy{display:flex;flex-direction:column;gap:22px;align-items:flex-start}
+.svc-sub{font-family:var(--body);font-size:0.75rem;font-weight:500;letter-spacing:.16em;color:var(--muted);margin-top:8px}
+.ticks{list-style:none;margin:0;padding:0;width:100%;border-top:1px solid var(--rule)}
+.ticks li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.ticks li::before{content:"";flex:none;width:10px;height:10px;margin-top:8px;background:var(--orange)}
+.svc-actions{display:flex;flex-wrap:wrap;align-items:center;gap:20px 28px;margin-top:8px}
+@media (max-width:900px){ .svc-grid{grid-template-columns:minmax(0,1fr)} .svc-grid.flip .svc-ph{order:0} .svc-ph{aspect-ratio:4/3} .svc-index{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} .svc-index a:nth-child(3){padding-left:0;border-left:0} .svc-index a:nth-child(n+3){border-top:1px solid var(--rule)} }
+</style>

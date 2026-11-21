@@ -1,12 +1,12 @@
 ---
-import { nav, services, contact } from '../data/site';
+import { footerCompany, services, contact } from '../data/site';
 const year = 2026;
 ---
 <footer class="footer on-dark">
   <div class="wrap foot-grid">
-    <div><a class="brand" href="#top"><img src="brand/logo.svg" alt="" width="38" height="38" />Apex Builders</a><p class="foot-about">Custom homes, renovations, design build and commercial TI across the Valley since 2016.</p></div>
-    <div><h2 class="foot-h">Services</h2><ul>{services.map((s) => <li><a href="#services">{s.title}</a></li>)}</ul></div>
-    <div><h2 class="foot-h">Company</h2><ul>{nav.filter((l) => l.label !== 'Services').map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+    <div><a class="brand" href="index.html"><img src="brand/logo.svg" alt="" width="38" height="38" />Apex Builders</a><p class="foot-about">Custom homes, renovations, design build and commercial TI across the Valley since 2016.</p></div>
+    <div><h2 class="foot-h">Services</h2><ul>{services.map((s) => <li><a href={`services.html#${s.slug}`}>{s.title}</a></li>)}</ul></div>
+    <div><h2 class="foot-h">Company</h2><ul>{footerCompany.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
     <div><h2 class="foot-h">Contact</h2><ul><li><a href={`tel:${contact.tel}`}>{contact.phone}</a></li><li><a href={`mailto:${contact.email}`}>{contact.email}</a></li><li>Chandler, AZ 85224</li><li><a href={`https://www.instagram.com/${contact.instagram}/`} target="_blank" rel="noopener">@{contact.instagram}<span class="sr-only"> (opens in a new tab)</span></a></li></ul></div>
   </div>
   <div class="wrap"><div class="foot-mark" id="footMark" aria-hidden="true"><span>A</span><span>P</span><span>E</span><span>X</span></div></div>

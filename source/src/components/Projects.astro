@@ -5,7 +5,7 @@ import { projects } from '../data/site';
 ---
 <section class="projects section" id="projects" aria-labelledby="proj-h">
   <div class="wrap">
-    <div class="head" data-reveal><Label n="03" text="Selected projects" /><h2 id="proj-h" data-edit="proj-title">Recent work</h2></div>
+    <div class="head-row" data-reveal><div class="head" style="margin:0"><Label n="03" text="Selected projects" /><h2 id="proj-h" data-edit="proj-title">Recent work</h2></div><a class="link" href="projects.html">All projects <span class="arr" aria-hidden="true">→</span></a></div>
     <div class="stack" id="stack">
       {projects.map((p, i) => (
         <article class="card">
@@ -15,7 +15,7 @@ import { projects } from '../data/site';
               <h3 data-edit={`proj-${i}-t`}>{p.title}</h3>
               <dl><dt>Location</dt><dd data-edit={`proj-${i}-c`}>{p.city}</dd></dl>
               <dl><dt>Scope</dt><dd data-edit={`proj-${i}-s`}>{p.scope}</dd></dl>
-              <a class="btn btn-outline" href="#contact">Plan one like it <span class="arr" aria-hidden="true">→</span></a>
+              <a class="btn btn-outline" href={`project-${p.slug}.html`}>View project <span class="arr" aria-hidden="true">→</span></a>
             </div>
           </div>
         </article>

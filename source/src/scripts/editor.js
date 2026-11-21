@@ -24,6 +24,7 @@ function clean(node) {
 const texts = () => $$('[data-edit]');
 const slots = () => $$('.ph[data-slot]');
 let state = { text: {}, media: {} };
+let loaded = { text: {}, media: {} };
 const orig = {};
 
 function renderMedia(slot, m) {
@@ -41,6 +42,7 @@ function renderMedia(slot, m) {
 }
 
 export function applyContent(c) {
+  loaded = { text: { ...(c.text || {}) }, media: { ...(c.media || {}) } };
   texts().forEach((el) => { orig[el.dataset.edit] = clean(el); });
   Object.entries(c.text || {}).forEach(([k, h]) => { const el = $(`[data-edit="${k}"]`); if (el && typeof h === 'string') { el.innerHTML = h; state.text[k] = h; } });
   Object.entries(c.media || {}).forEach(([k, m]) => {
@@ -127,10 +129,11 @@ export async function initEditor() {
 
   async function save() {
     if (saving) return; saving = true; saveBtn.disabled = true; say('Saving…');
-    const out = { text: {}, media: {} };
-    texts().forEach((el) => { const h = clean(el); if (h !== orig[el.dataset.edit]) out.text[el.dataset.edit] = h; });
-    Object.entries(state.media).forEach(([k, m]) => { if (m) out.media[k] = m; });
-    try { await art.publish({ 'content.json': JSON.stringify(out, null, 1) }); dirty = false; say('Saved'); }
+    /* Start from everything saved on every page, then apply this page's changes */
+    const out = { text: { ...loaded.text }, media: { ...loaded.media } };
+    texts().forEach((el) => { const k = el.dataset.edit, h = clean(el); if (h !== orig[k]) out.text[k] = h; else delete out.text[k]; });
+    Object.entries(state.media).forEach(([k, m]) => { if (m) out.media[k] = m; else delete out.media[k]; });
+    try { await art.publish({ 'content.json': JSON.stringify(out, null, 1) }); loaded = out; dirty = false; say('Saved'); }
     catch (err) {
       const c = err && err.code; saveBtn.disabled = false;
       say(c === 'conflict' ? 'Someone saved a newer version. Loading it now.' : c === 'not_writer' || c === 'not_granted' ? 'You can view this page but not save changes to it.' : c === 'rate_limited' ? 'Saving too often. Wait a few seconds and press Save again.' : 'Save failed. Press Save to try again.');

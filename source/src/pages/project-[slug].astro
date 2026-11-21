@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import Ph from '../components/Ph.astro';
+import Label from '../components/Label.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { allProjects } from '../data/site';
+export function getStaticPaths() { return allProjects.map((p) => ({ params: { slug: p.slug } })); }
+const { slug } = Astro.params;
+const i = allProjects.findIndex((p) => p.slug === slug), p = allProjects[i], next = allProjects[(i + 1) % allProjects.length];
+const k = `pr-${p.slug}`;
+const shots = ['Wide room shot', 'Detail close up', 'Kitchen or main space', 'Second space', 'Finish detail', 'Exterior or outdoor living'];
+---
+<Base title={`${p.title} | Apex Builders`} description={`${p.title}: ${p.scope} in ${p.city} by Apex Builders.`} current="projects.html">
+  <section class="page-head" aria-labelledby={`${k}-h`}>
+    <div class="wrap page-head-in">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="projects.html">Projects</a><span aria-hidden="true">/</span><span aria-current="page">{p.title}</span></nav>
+      <Label n={String(i + 1).padStart(2, '0')} text={p.type} />
+      <h1 id={`${k}-h`} data-edit={`${k}-title`}>{p.title}</h1>
+    </div>
+    <div class="wrap"><Ph slot={p.slot} class="page-ph" parallax eager alt={p.alt} label={`${p.title}: hero photo`} spec="21:9, wide" /></div>
+  </section>
+  <section class="section pr-body" aria-label="Project details">
+    <div class="wrap pr-grid">
+      <dl class="facts">
+        <div><dt>Location</dt><dd data-edit={`${k}-city`}>{p.city}</dd></div>
+        <div><dt>Scope</dt><dd data-edit={`${k}-scope`}>{p.scope}</dd></div>
+        <div><dt>Completed</dt><dd data-edit={`${k}-year`}>{p.year}</dd></div>
+        <div><dt>Timeline</dt><dd data-edit={`${k}-time`}>[Length of build]</dd></div>
+      </dl>
+      <div class="pr-story">
+        <h2 data-edit={`${k}-st`}>The project</h2>
+        <p class="lead" data-edit={`${k}-p1`}>[What the client wanted and why they called Apex. Two or three sentences.]</p>
+        <p data-edit={`${k}-p2`}>[How the work was planned and built: the scope, the hard parts and the choices that made the difference.]</p>
+        <p data-edit={`${k}-p3`}>[How it turned out and what the client says about it now.]</p>
+      </div>
+    </div>
+  </section>
+  <section class="pr-gallery" aria-label="Project photos">
+    <div class="wrap pr-photos">
+      {shots.map((s, j) => <Ph slot={`${k}-g${j + 1}`} class={`pg pg-${j + 1}`} alt="" label={s} spec={j === 0 || j === 5 ? 'Landscape' : 'Any'} />)}
+    </div>
+  </section>
+  <section class="section" aria-label="Client words">
+    <div class="wrap pr-quote" data-reveal>
+      <blockquote><span data-edit={`${k}-q`}>[A short quote from the client about working with Apex.]</span><cite data-edit={`${k}-qc`}>[Client first name], {p.city}</cite></blockquote>
+    </div>
+  </section>
+  <nav class="wrap next-proj" aria-label="Next project">
+    <a href={`project-${next.slug}.html`}><span class="label"><b>Next</b>Project</span><span class="np-t">{next.title} <span class="arr" aria-hidden="true">→</span></span></a>
+  </nav>
+  <CtaBand edit={`${k}-cta`} title="Want something like this?" />
+</Base>
+<style is:global>
+.pr-grid{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(32px,6vw,112px)}
+.pr-story{display:flex;flex-direction:column;gap:20px;max-width:62ch}
+.pr-story p:not(.lead){color:var(--ink-2)}
+.pr-photos{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.pg{aspect-ratio:4/3}
+.pg-1{grid-column:span 4;aspect-ratio:auto;min-height:100%}
+.pg-2,.pg-3{grid-column:span 2}
+.pg-4,.pg-5{grid-column:span 3}
+.pg-6{grid-column:1/-1;aspect-ratio:21/9}
+.pr-quote blockquote{max-width:28ch;font-size:clamp(1.75rem,3vw,2.75rem)}
+.next-proj a{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:32px 0;border-top:1px solid var(--rule);margin-bottom:clamp(56px,7vw,104px)}
+.np-t{font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:clamp(2rem,4vw,3.5rem);line-height:1}
+@media (hover:hover){ .next-proj a:hover .np-t{color:var(--ember)} .next-proj a:hover .arr{transform:translateX(4px)} }
+@media (max-width:900px){
+  .pr-grid{grid-template-columns:minmax(0,1fr)}
+  .pr-photos{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .pg-1,.pg-6{grid-column:1/-1;aspect-ratio:4/3;min-height:0}
+  .pg-2,.pg-3,.pg-4,.pg-5{grid-column:span 1}
+}
+</style>

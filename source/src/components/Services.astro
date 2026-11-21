@@ -7,7 +7,7 @@ import { services } from '../data/site';
   <div class="wrap">
     <div class="head-row" data-reveal>
       <div class="head" style="margin:0"><Label n="02" text="Services" /><h2 id="svc-h" data-edit="svc-title">What we build</h2></div>
-      <p class="lead" data-edit="svc-lead">One team from first sketch to final walkthrough, whether it is a new home, a full remodel or a commercial space.</p>
+      <div class="head-side"><p class="lead" data-edit="svc-lead">One team from first sketch to final walkthrough, whether it is a new home, a full remodel or a commercial space.</p><a class="link" href="services.html">All services <span class="arr" aria-hidden="true">→</span></a></div>
     </div>
     <div class="strips" id="strips">
       {services.map((s, i) => (
@@ -18,7 +18,7 @@ import { services } from '../data/site';
             <h3 data-edit={`svc-${i}-t`}>{s.title}</h3>
             <div class="strip-more"><div>
               <p data-edit={`svc-${i}-p`}>{s.text}</p>
-              <a class="link" href={s.href}>{s.link} <span class="arr" aria-hidden="true">→</span></a>
+              <a class="link" href={`services.html#${s.slug}`}>{s.link} <span class="arr" aria-hidden="true">→</span></a>
             </div></div>
           </div>
         </article>
@@ -27,6 +27,7 @@ import { services } from '../data/site';
   </div>
 </section>
 <style is:global>
+.head-side{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
 .strips{display:flex;gap:12px;height:clamp(520px,64vh,680px)}
 .strip{position:relative;flex:1 1 0;min-width:0;border-radius:var(--r-photo);overflow:hidden;transition:flex-grow .9s var(--ease);display:flex;align-items:flex-end}
 .strip.is-open{flex-grow:3.2}

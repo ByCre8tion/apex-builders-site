@@ -1,0 +1,18 @@
+---
+import { contact } from '../data/site';
+interface Props { title?: string; text?: string; edit?: string; }
+const { title = 'Ready when you are', text = 'Tell us about the project and we will set up a site walk.', edit = 'cta' } = Astro.props;
+---
+<section class="cta-band on-dark" aria-labelledby={`${edit}-h`}>
+  <div class="wrap cta-in">
+    <div><h2 id={`${edit}-h`} data-edit={`${edit}-title`}>{title}</h2><p data-edit={`${edit}-text`}>{text}</p></div>
+    <div class="cta-actions"><a class="btn btn-primary" href="contact.html">Get a quote <span class="arr" aria-hidden="true">→</span></a><a class="btn btn-ghost" href={`tel:${contact.tel}`}>Call {contact.phone}</a></div>
+  </div>
+</section>
+<style is:global>
+.cta-band{background:var(--ink);padding-block:clamp(72px,9vw,128px)}
+.cta-in{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px}
+.cta-band h2{font-size:clamp(2.5rem,5vw,4.5rem);max-width:14ch}
+.cta-band p{margin-top:16px;color:var(--plaster-2);max-width:44ch}
+.cta-actions{display:flex;flex-wrap:wrap;gap:12px}
+</style>

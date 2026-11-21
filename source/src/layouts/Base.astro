@@ -3,8 +3,8 @@ import '../styles/site.css';
 import '../styles/editor.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-interface Props { title: string; description: string; }
-const { title, description } = Astro.props;
+interface Props { title: string; description: string; current?: string; }
+const { title, description, current = '' } = Astro.props;
 const site = 'https://bycre8tion.github.io/apex-builders-site/';
 ---
 <!doctype html>
@@ -31,7 +31,7 @@ const site = 'https://bycre8tion.github.io/apex-builders-site/';
   {process.env.APEX_TARGET !== 'artifact' && <link rel="preload" as="image" href="media/60518a43f8ef053753318bda54163982-v2.webp" fetchpriority="high" />}
 </head>
 <body>
-  <Nav />
+  <Nav current={current} />
   <main id="top"><span id="main" tabindex="-1"></span><slot /></main>
   <Footer />
   <script>

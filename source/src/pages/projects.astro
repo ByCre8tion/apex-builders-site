@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Ph from '../components/Ph.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { allProjects } from '../data/site';
+const types = [...new Set(allProjects.map((p) => p.type))];
+---
+<Base title="Projects | Apex Builders" description="Custom homes, remodels and commercial builds by Apex Builders across the Phoenix Valley." current="projects.html">
+  <PageHeader n="02" label="Projects" title="Recent work" edit="projects" lead="A look at homes and spaces we have built and remodeled across the Valley. Open any project for the full story and photos." />
+  <section class="section proj-index" aria-label="All projects" style="padding-top:0">
+    <div class="wrap">
+      <div class="filters" data-filters="#projGrid" role="group" aria-label="Filter projects">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        {types.map((t) => <button type="button" data-filter={t} aria-pressed="false">{t}</button>)}
+        <span class="filter-count" aria-live="polite"></span>
+      </div>
+      <div class="proj-grid" id="projGrid">
+        {allProjects.map((p, i) => (
+          <article class:list={['proj-item', { wide: i === 0 }]} data-cat={p.type} data-reveal>
+            <a href={`project-${p.slug}.html`} class="proj-link">
+              <Ph slot={p.slot} alt={p.alt} label={`${p.title}: cover photo`} spec="16:10" />
+              <div class="proj-cap">
+                <h2 data-edit={`pi-${p.slug}-t`}>{p.title}</h2>
+                <span>{p.city} · {p.scope}</span>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand edit="proj-cta" title="Have a project like these?" />
+</Base>
+<style is:global>
+.proj-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(40px,5vw,72px) 16px}
+.proj-item.wide{grid-column:1/-1}
+.proj-item .ph{aspect-ratio:16/10}
+.proj-item.wide .ph{aspect-ratio:21/9}
+.proj-link{display:block}
+.proj-cap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 20px;padding:18px 2px;border-bottom:1px solid var(--rule)}
+.proj-cap h2{font-size:clamp(1.75rem,2.6vw,2.5rem);line-height:1}
+.proj-cap span{font-size:0.875rem;color:var(--muted)}
+.proj-link .ph-asset{transition:transform .8s var(--ease)}
+@media (hover:hover){ .proj-link:hover .ph-asset{transform:scale(1.03)} .proj-link:hover h2{color:var(--ember)} }
+@media (max-width:760px){ .proj-grid{grid-template-columns:minmax(0,1fr)} .proj-item.wide .ph{aspect-ratio:16/10} }
+</style>

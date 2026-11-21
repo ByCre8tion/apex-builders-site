@@ -1,16 +1,17 @@
 ---
 import { nav, contact } from '../data/site';
+const { current = '' } = Astro.props as { current?: string };
 ---
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="nav" id="nav">
   <div class="nav-bar">
-    <a class="brand" href="#top" aria-label="Apex Builders home"><img src="brand/logo.svg" alt="" width="38" height="38" />Apex Builders</a>
+    <a class="brand" href="index.html" aria-label="Apex Builders home"><img src="brand/logo.svg" alt="" width="38" height="38" />Apex Builders</a>
     <nav class="nav-links" aria-label="Main">
-      {nav.map((l) => <a href={l.href} data-edit={`nav-${l.label.toLowerCase()}`}>{l.label}</a>)}
+      {nav.filter((l) => l.label !== 'Contact').map((l) => <a href={l.href} aria-current={current === l.href ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="nav-right">
       <a class="nav-phone" href={`tel:${contact.tel}`}>{contact.phone}</a>
-      <a class="btn nav-cta" href="#contact">Get a quote</a>
+      <a class="btn nav-cta" href="contact.html">Get a quote</a>
       <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="sheet"><span class="mb-label">Menu</span><span class="mb-icon" aria-hidden="true"></span></button>
     </div>
   </div>
@@ -18,7 +19,7 @@ import { nav, contact } from '../data/site';
 <div class="sheet" id="sheet" aria-hidden="true">
   {nav.map((l, i) => <a class="big" href={l.href}><span class="n">{String(i + 1).padStart(2, '0')}</span>{l.label}</a>)}
   <div class="sheet-foot">
-    <a class="btn btn-primary" href="#contact">Get a quote</a>
+    <a class="btn btn-primary" href="contact.html">Get a quote</a>
     <a href={`tel:${contact.tel}`}>{contact.phone}</a>
     <a href={`mailto:${contact.email}`}>{contact.email}</a>
   </div>
@@ -35,7 +36,7 @@ import { nav, contact } from '../data/site';
 .nav-links{display:flex;margin-inline:auto}
 .nav-links a{position:relative;padding:10px 16px;font-size:0.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
 .nav-links a::after{content:"";position:absolute;left:16px;right:16px;bottom:5px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .25s ease-out}
-.nav-links a:focus-visible::after{transform:none}
+.nav-links a:focus-visible::after,.nav-links a[aria-current]::after{transform:none}
 .nav-right{display:flex;align-items:center;gap:22px;margin-left:auto}
 .nav-links+.nav-right{margin-left:0}
 .nav-phone{font-size:0.875rem;font-weight:500;font-variant-numeric:tabular-nums}

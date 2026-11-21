@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Label from '../components/Label.astro';
+import Contact from '../components/Contact.astro';
+import Ph from '../components/Ph.astro';
+import { contact } from '../data/site';
+---
+<Base title="Contact | Apex Builders" description="Get a quote from Apex Builders. Call 602.345.1071 or send your project details." current="contact.html">
+  <div class="contact-page"><Contact n="08" heading="Get a quote" /></div>
+  <section class="section chalk" aria-labelledby="visit-h">
+    <div class="wrap visit-grid">
+      <div class="visit-copy" data-reveal>
+        <Label n="02" text="Visit" />
+        <h2 id="visit-h" data-edit="visit-title">The office</h2>
+        <dl class="facts">
+          <div><dt>Address</dt><dd>{contact.address}</dd></div>
+          <div><dt>Phone</dt><dd><a href={`tel:${contact.tel}`}>{contact.phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd></div>
+          <div><dt>Hours</dt><dd data-edit="visit-hours">[Office hours]</dd></div>
+          <div><dt>License</dt><dd>ROC #{contact.roc}</dd></div>
+        </dl>
+        <a class="link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`} target="_blank" rel="noopener">Open in Google Maps<span class="sr-only"> (opens in a new tab)</span> <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <Ph slot="contact-map" class="map-ph" alt="" label="Office photo or map screenshot" spec="4:3" />
+    </div>
+  </section>
+</Base>
+<style is:global>
+.contact-page .contact{padding-top:calc(72px + clamp(48px,6vw,96px) + env(safe-area-inset-top,0px))}
+.visit-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,112px);align-items:center}
+.visit-copy{display:flex;flex-direction:column;gap:22px;align-items:flex-start}
+.visit-copy .facts{width:100%}
+.map-ph{aspect-ratio:4/3}
+@media (max-width:900px){ .visit-grid{grid-template-columns:minmax(0,1fr)} }
+</style>

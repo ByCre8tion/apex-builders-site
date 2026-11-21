@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Ph from '../components/Ph.astro';
+import Label from '../components/Label.astro';
+import Process from '../components/Process.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { values, contact } from '../data/site';
+---
+<Base title="About | Apex Builders" description="Jason started at eight years old on his father's job sites. Apex Builders builds the way he was taught." current="about.html">
+  <PageHeader n="04" label="About" title="Raised on the jobsite" edit="about-page" />
+  <section class="section" aria-label="Jason's story" style="padding-top:0">
+    <div class="wrap story-grid">
+      <Ph slot="portrait" class="story-ph" parallax alt="Jason, owner and founder of Apex Builders" label="Portrait of Jason on a job site" spec="4:5" eager />
+      <div class="story-copy" data-reveal>
+        <p class="lead" data-edit="ab-lead">Jason started at eight years old, handing tools to his father and grandfather in Colorado. He moved to Arizona in 2008, built and sold his first construction company, then started Apex to build the way he was taught: every detail counts.</p>
+        <p data-edit="ab-p2">[A second paragraph in Jason's words: what he learned from his family, why he started Apex in 2016 and what he wants every client to feel at the final walkthrough.]</p>
+        <blockquote><span data-edit="ab-quote">We aren’t perfect. How you handle a mistake and make it right is what defines a company.</span><cite data-edit="ab-cite">Jason, owner and founder</cite></blockquote>
+      </div>
+    </div>
+  </section>
+  <section class="section chalk" aria-labelledby="values-h">
+    <div class="wrap">
+      <div class="head" data-reveal><Label n="02" text="What we stand for" /><h2 id="values-h" data-edit="values-title">How we work</h2></div>
+      <div class="values">{values.map((v, i) => <div class="value" data-reveal><span class="value-n">{String(i + 1).padStart(2, '0')}</span><h3 data-edit={`val-${i}-t`}>{v.title}</h3><p data-edit={`val-${i}-p`}>{v.text}</p></div>)}</div>
+    </div>
+  </section>
+  <section class="section" aria-labelledby="team-h">
+    <div class="wrap">
+      <div class="head" data-reveal><Label n="03" text="The team" /><h2 id="team-h" data-edit="team-title">The crew behind the work</h2></div>
+      <div class="team">
+        <Ph slot="mosaic-crew" class="t-1" alt="The Apex crew" label="Crew group photo" spec="Landscape" />
+        <Ph slot="mosaic-team" class="t-2" alt="The Apex team together" label="Team get together" />
+        <Ph slot="mosaic-detail" class="t-3" alt="" label="Finish carpentry close up" />
+        <Ph slot="team-4" class="t-4" alt="" label="Crew on site" />
+      </div>
+    </div>
+  </section>
+  <Process />
+  <section class="license" aria-label="License">
+    <div class="wrap lic-in"><span class="label"><b>ROC</b>#{contact.roc}</span><p data-edit="lic-p">Licensed, bonded and insured in Arizona. Building and renovating homes here since 2016, and in the trade since 2008.</p></div>
+  </section>
+  <CtaBand edit="ab-cta" />
+</Base>
+<style is:global>
+.story-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,112px);align-items:end}
+.story-ph{aspect-ratio:4/5}
+.story-copy{display:flex;flex-direction:column;gap:24px;max-width:58ch}
+.story-copy p:not(.lead){color:var(--ink-2)}
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:clamp(180px,20vw,300px);gap:12px}
+.t-1{grid-column:span 2;grid-row:span 2}
+.t-2{grid-column:span 2}
+.license{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.lic-in{display:flex;flex-wrap:wrap;gap:16px 48px;align-items:baseline;padding-block:36px}
+.lic-in p{color:var(--ink-2);max-width:60ch}
+@media (max-width:900px){
+  .story-grid,.values{grid-template-columns:minmax(0,1fr)}
+  .value+.value{padding-left:0;border-left:0;border-top:1px solid var(--rule)}
+  .team{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+</style>

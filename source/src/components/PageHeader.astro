@@ -1,0 +1,15 @@
+---
+import Label from './Label.astro';
+import Ph from './Ph.astro';
+interface Props { n: string; label: string; title: string; lead?: string; photo?: string; imgLabel?: string; edit: string; }
+const { n, label, title, lead, photo, imgLabel = 'Wide photo for this page', edit } = Astro.props;
+---
+<section class="page-head" aria-labelledby={`${edit}-h`}>
+  <div class="wrap page-head-in">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">{label}</span></nav>
+    <Label n={n} text={label} />
+    <h1 id={`${edit}-h`} data-edit={`${edit}-title`}>{title}</h1>
+    {lead && <p class="lead" data-edit={`${edit}-lead`}>{lead}</p>}
+  </div>
+  {photo && <div class="wrap"><Ph slot={photo} class="page-ph" parallax alt="" label={imgLabel} spec="21:9, wide" eager /></div>}
+</section>

@@ -18,13 +18,3 @@ import Label from './Label.astro';
     </div>
   </div>
 </section>
-<style is:global>
-.founder-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(32px,5vw,96px);align-items:stretch}
-.portrait{min-height:560px}
-.founder-copy{display:flex;flex-direction:column;gap:28px}
-blockquote{margin:0;padding-left:22px;border-left:2px solid var(--orange);font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,2.2vw,2rem);line-height:1.2;max-width:26ch}
-cite{display:block;margin-top:12px;font-family:var(--body);font-style:normal;font-size:0.875rem;font-weight:400;color:var(--muted)}
-.mosaic{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:200px 200px;gap:12px;margin-top:auto}
-.mosaic .ph:first-child{grid-row:span 2}
-@media (max-width:900px){ .founder-grid{grid-template-columns:minmax(0,1fr)} .portrait{min-height:0;aspect-ratio:4/5} .mosaic{grid-template-rows:150px 150px} }
-</style>

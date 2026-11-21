@@ -24,8 +24,8 @@ export function initInteractions() {
 
   /* Nav turns white once the hero is behind it */
   const nav = $('#nav'), hero = $('.hero');
-  const solid = () => nav.classList.toggle('solid', scrollY > hero.offsetHeight - 90);
-  addEventListener('scroll', solid, { passive: true }); solid();
+  if (hero) { const solid = () => nav.classList.toggle('solid', scrollY > hero.offsetHeight - 90); addEventListener('scroll', solid, { passive: true }); solid(); }
+  else nav.classList.add('solid');
 
   /* Services accordion */
   const strips = $$('#strips .strip');
@@ -37,7 +37,7 @@ export function initInteractions() {
   });
 
   /* FAQ */
-  $$('#faqList .qa').forEach((q) => {
+  $$('.qa').forEach((q) => {
     const b = $('button', q);
     b.addEventListener('click', () => {
       const isOpen = q.classList.toggle('open');
@@ -47,28 +47,66 @@ export function initInteractions() {
   });
 
   /* Quote form */
-  $('#quoteForm').addEventListener('submit', (e) => {
+  $$('form[data-validate]').forEach((form) => form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = $('#f-name'), phone = $('#f-phone');
-    const badName = !name.value.trim(), badPhone = phone.value.replace(/\D/g, '').length < 10;
-    $('#e-name').textContent = badName ? 'Add your name so we know who to ask for.' : '';
-    $('#e-phone').textContent = badPhone ? 'Add a 10 digit phone number so we can call you back.' : '';
-    badName ? name.setAttribute('aria-invalid', 'true') : name.removeAttribute('aria-invalid');
-    badPhone ? phone.setAttribute('aria-invalid', 'true') : phone.removeAttribute('aria-invalid');
-    if (badName || badPhone) { (badName ? name : phone).focus(); return; }
-    $('#formFields').hidden = true; $('#formDone').hidden = false; $('#formDone h3').focus();
-  });
+    let first = null;
+    $$('[required]', form).forEach((f) => {
+      const bad = f.type === 'tel' ? f.value.replace(/\D/g, '').length < 10 : !f.value.trim();
+      const err = $('#e-' + f.id); if (err) err.textContent = bad ? f.dataset.msg : '';
+      bad ? f.setAttribute('aria-invalid', 'true') : f.removeAttribute('aria-invalid');
+      if (bad && !first) first = f;
+    });
+    if (first) { first.focus(); return; }
+    $('.form-fields', form).hidden = true; const done = $('.form-done', form); done.hidden = false; $('h3', done).focus();
+  }));
   const params = new URLSearchParams(location.search);
-  ['utm_source', 'utm_campaign'].forEach((k) => { const v = params.get(k); if (v) $(`#quoteForm [name="${k}"]`).value = v; });
+  ['utm_source', 'utm_campaign'].forEach((k) => { const v = params.get(k); $$(`form [name="${k}"]`).forEach((f) => { if (v) f.value = v; }); });
 
   /* Process track is keyboard scrollable when it scrolls natively */
   const track = $('#track');
+  if (track) {
   const syncTrack = () => { if (track.scrollWidth > track.clientWidth + 2 && getComputedStyle(track).overflowX === 'auto') track.tabIndex = 0; else track.removeAttribute('tabindex'); };
   syncTrack(); addEventListener('resize', syncTrack);
+  }
 
   initVideos();
   initCarousel();
   initWidgets();
+  initFilters();
+  initViewer();
+}
+
+/* Filter chips: buttons with data-filter inside [data-filters], items with data-cat inside its data-target */
+function initFilters() {
+  $$('[data-filters]').forEach((bar) => {
+    const items = $$('[data-cat]', $(bar.dataset.filters)), chips = $$('button[data-filter]', bar), live = $('.filter-count', bar.parentElement);
+    chips.forEach((c) => c.addEventListener('click', () => {
+      const f = c.dataset.filter;
+      chips.forEach((x) => x.setAttribute('aria-pressed', x === c));
+      let n = 0; items.forEach((it) => { const show = f === 'all' || it.dataset.cat === f; it.hidden = !show; if (show) n++; });
+      if (live) live.textContent = `Showing ${n} of ${items.length}`;
+      window.ScrollTrigger && window.ScrollTrigger.refresh();
+    }));
+  });
+}
+
+/* Gallery viewer: native dialog, arrows and Escape, only for frames that hold a photo */
+function initViewer() {
+  const dlg = $('#viewer'); if (!dlg) return;
+  const img = $('img', dlg), cap = $('.viewer-cap', dlg);
+  let list = [], i = 0, from = null;
+  const show = () => { const it = list[i]; img.src = $('.ph-asset', it).getAttribute('src'); img.alt = it.dataset.label || ''; cap.textContent = `${it.dataset.label} · ${i + 1} of ${list.length}`; };
+  $$('.gal-open').forEach((b) => b.addEventListener('click', () => {
+    if (document.body.classList.contains('editing')) return;
+    list = $$('.gal-item:not([hidden])').filter((x) => $('.ph-asset', x)); const it = b.closest('.gal-item');
+    if (!$('.ph-asset', it)) return;
+    i = list.indexOf(it); from = b; show(); dlg.showModal();
+  }));
+  $('.v-prev', dlg).addEventListener('click', () => { i = (i - 1 + list.length) % list.length; show(); });
+  $('.v-next', dlg).addEventListener('click', () => { i = (i + 1) % list.length; show(); });
+  $('.v-close', dlg).addEventListener('click', () => dlg.close());
+  dlg.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') $('.v-next', dlg).click(); if (e.key === 'ArrowLeft') $('.v-prev', dlg).click(); });
+  dlg.addEventListener('close', () => from && from.focus());
 }
 
 /* Video: autoplay only without reduced motion, always with a pause control */
@@ -100,8 +138,8 @@ function spring({ from, to, velocity = 0, response = 0.45, damping = 1, onUpdate
 }
 
 function initCarousel() {
-  const vp = $('#rvViewport'), track = $('#rvTrack'), cards = $$('.review', track);
-  if (!vp || !cards.length) return;
+  const vp = $('#rvViewport'), track = $('#rvTrack'); if (!vp || !track) return;
+  const cards = $$('.review', track); if (!cards.length) return;
   let x = 0, anim = null, drag = null;
   const set = (v) => { x = v; track.style.transform = `translate3d(${v}px,0,0)`; };
   const bounds = () => ({ min: Math.min(0, -(track.scrollWidth - vp.clientWidth)), max: 0 });

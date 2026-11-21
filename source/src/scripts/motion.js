@@ -9,7 +9,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 export function initMotion() {
   /* Marquee copy so the strip loops without a gap */
-  const mq = $('#marquee'); mq.appendChild(mq.firstElementChild.cloneNode(true));
+  const mq = $('#marquee'); if (mq) mq.appendChild(mq.firstElementChild.cloneNode(true));
   if (reduce) return;
 
   gsap.registerPlugin(ScrollTrigger);
@@ -40,20 +40,24 @@ export function initMotion() {
   } });
 
   /* Hero intro */
-  gsap.timeline({ defaults: { ease: 'expo.out' } })
+  if ($('#heroFrame')) gsap.timeline({ defaults: { ease: 'expo.out' } })
     .from('#heroFrame', { clipPath: 'inset(4% 3% 4% 3% round 4px)', duration: 1.6, clearProps: 'clipPath' })
     .from('#heroFrame .ph-media', { scale: 1.14, duration: 2 }, 0)
     .from('.hero h1 .line > span', { yPercent: 110, duration: 1.3, stagger: 0.1 }, 0.25)
     .from('[data-intro]', { y: 24, opacity: 0, duration: 1.1, stagger: 0.08 }, 0.6)
     .from('.nav-bar', { y: -16, opacity: 0, duration: 1 }, 0.5);
 
-  if (!small) gsap.to('.hero-content', { y: -90, opacity: 0.15, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '70% top', scrub: true } });
+  if (!small && $('.hero')) gsap.to('.hero-content', { y: -90, opacity: 0.15, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '70% top', scrub: true } });
 
   /* Statement words light up as you read */
   const st = $('#statement');
+  if (st) {
   st.dataset.src = st.innerHTML;
   st.innerHTML = st.innerHTML.replace(/(<span class="hl">)?([^\s<]+)(<\/span>)?/g, (m, open, word) => (open ? `<span class="w hl">${word}</span>` : `<span class="w">${word}</span>`));
   window.__stTween = gsap.fromTo('#statement .w', { opacity: 0.16 }, { opacity: 1, ease: 'none', stagger: 0.12, scrollTrigger: { trigger: st, start: 'top 78%', end: 'bottom 42%', scrub: true } });
+  }
+  /* Page titles rise in */
+  if ($('.page-head h1')) gsap.from('.page-head-in > *', { y: 28, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.07, delay: 0.1 });
 
   /* Reveals */
   ScrollTrigger.batch('[data-reveal]', { start: 'top 88%', once: true, onEnter: (els) => gsap.from(els, { y: 32, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08, overwrite: true }) });
@@ -61,7 +65,7 @@ export function initMotion() {
   if (!small) {
     /* Photos drift a little slower than the page */
     $$('[data-parallax]').forEach((f) => { const m = $('.ph-media', f); if (m) gsap.fromTo(m, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } }); });
-    gsap.to('#heroFrame .ph-media', { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    if ($('#heroFrame')) gsap.to('#heroFrame .ph-media', { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
     /* House drawings wipe in from the left */
     $$('.bg-draw').forEach((d) => {
@@ -84,16 +88,18 @@ export function initMotion() {
 
   /* Process pans sideways on desktop */
   gsap.matchMedia().add('(min-width: 901px)', () => {
-    const track = $('#track');
+    const track = $('#track'); if (!track) return;
     const dist = () => track.scrollWidth - document.documentElement.clientWidth;
     gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '.process', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, onUpdate: (self) => gsap.set('#progress', { scaleX: self.progress }) } });
   });
 
   /* City strip drifts, with a pause control */
+  if (mq) {
   const drift = gsap.to('#marquee', { xPercent: -50, ease: 'none', duration: 80, repeat: -1, paused: true });
   const btn = $('#mqToggle'); let paused = false; btn.hidden = false;
   ScrollTrigger.create({ trigger: '.areas', start: 'top 90%', once: true, onEnter: () => { if (!paused) drift.play(0); } });
   btn.addEventListener('click', () => { paused = !paused; paused ? drift.pause() : drift.play(); btn.setAttribute('aria-pressed', paused); btn.textContent = paused ? 'Play' : 'Pause'; });
+  }
 
   /* Footer wordmark rises */
   gsap.from('#footMark span', { yPercent: 100, duration: 1.4, ease: 'expo.out', stagger: 0.07, scrollTrigger: { trigger: '#footMark', start: 'top 95%' } });

@@ -3,14 +3,15 @@ import Ph from './Ph.astro';
 import Label from './Label.astro';
 import Drawing from './Drawing.astro';
 import { contact, projectTypes, budgets, sources } from '../data/site';
+const { n = '09', heading = 'Let’s talk about your project' } = Astro.props as { n?: string; heading?: string };
 ---
 <section class="contact section has-draw" id="contact" aria-labelledby="contact-h">
   <Drawing n={2} class="draw-contact" />
   <div class="wrap contact-grid">
     <div class="contact-side">
       <div class="contact-copy">
-        <Label n="09" text="Contact" />
-        <h2 id="contact-h" data-reveal data-edit="contact-title">Let’s talk about your project</h2>
+        <Label n={n} text="Contact" />
+        <h2 id="contact-h" data-reveal data-edit="contact-title">{heading}</h2>
         <a class="phone" href={`tel:${contact.tel}`} data-reveal>{contact.phone}</a>
         <div class="contact-lines" data-reveal>
           <a href={`mailto:${contact.email}`}>{contact.email}</a>
@@ -20,13 +21,13 @@ import { contact, projectTypes, budgets, sources } from '../data/site';
       </div>
       <Ph slot="contact" class="contact-ph" parallax alt="A finished Apex interior" label="Finished home exterior or interior, wide" spec="4:3 or wider" />
     </div>
-    <form class="form" id="quoteForm" novalidate>
+    <form class="form" id="quoteForm" novalidate data-validate>
       <div id="formFields" class="form-fields">
         <h3>Get a quote</h3>
         <p class="req-note">Fields marked * are required.</p>
         <div class="row2">
-          <div class="field"><label for="f-name">Full name <span aria-hidden="true">*</span></label><input id="f-name" name="name" autocomplete="name" required aria-describedby="e-name" /><span class="err" id="e-name"></span></div>
-          <div class="field"><label for="f-phone">Phone <span aria-hidden="true">*</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required aria-describedby="e-phone" /><span class="err" id="e-phone"></span></div>
+          <div class="field"><label for="f-name">Full name <span aria-hidden="true">*</span></label><input id="f-name" name="name" autocomplete="name" required aria-describedby="e-name" data-msg="Add your name so we know who to ask for." /><span class="err" id="e-name"></span></div>
+          <div class="field"><label for="f-phone">Phone <span aria-hidden="true">*</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required aria-describedby="e-phone" data-msg="Add a 10 digit phone number so we can call you back." /><span class="err" id="e-phone"></span></div>
         </div>
         <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" spellcheck="false" /></div>
         <div class="row2">
@@ -46,35 +47,3 @@ import { contact, projectTypes, budgets, sources } from '../data/site';
     </form>
   </div>
 </section>
-<style is:global>
-.draw-contact{top:0}
-.draw-contact img{margin-inline:-8% auto;opacity:.85}
-.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,480px);gap:clamp(32px,5vw,80px);align-items:stretch}
-.contact-side{display:flex;flex-direction:column;gap:clamp(28px,3vw,40px)}
-.contact-copy{display:flex;flex-direction:column;gap:24px}
-.contact-copy h2{max-width:11ch}
-.phone{font-family:var(--display);font-weight:600;font-size:clamp(2.75rem,5vw,4.875rem);line-height:1;font-variant-numeric:tabular-nums}
-.contact-lines{display:flex;flex-direction:column;gap:4px;color:var(--ink-2)}
-.contact-lines a{text-decoration:underline;text-decoration-color:var(--rule-strong);text-underline-offset:4px}
-.contact-lines small{color:var(--muted);font-size:0.875rem;margin-top:8px}
-.contact-ph{flex:1;min-height:320px}
-.form{background:var(--chalk);border-radius:var(--r-photo);padding:clamp(22px,2.6vw,36px);align-self:start}
-.form-fields{display:flex;flex-direction:column;gap:16px}
-.form h3{font-size:1.875rem}
-.req-note,.form-note{font-size:0.8125rem;color:var(--muted)}
-.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
-.field{display:flex;flex-direction:column;gap:7px;min-width:0}
-.field label{font-size:0.875rem;font-weight:500;color:var(--ink-2)}
-.field input,.field select,.field textarea{font:inherit;font-size:1rem;color:var(--ink);background:var(--white);border:1px solid var(--rule-strong);border-radius:var(--r-btn);padding:13px 14px;width:100%;transition:border-color .25s ease-out}
-.field textarea{resize:vertical}
-.field input::placeholder,.field textarea::placeholder{color:#6B6F71}
-.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--focus);outline-offset:1px;border-color:var(--ink)}
-.field input[aria-invalid="true"]{border-color:#B42318}
-.field .err{font-size:0.8125rem;color:#B42318}
-.form .btn{width:100%}
-.form-done{display:flex;flex-direction:column;gap:12px}
-.form-done h3{font-size:2.125rem}
-.form-done h3:focus{outline:none}
-@media (max-width:900px){ .contact-grid{grid-template-columns:minmax(0,1fr)} .contact-ph{flex:none;aspect-ratio:4/3;min-height:0} }
-@media (max-width:640px){ .row2{grid-template-columns:minmax(0,1fr)} }
-</style>

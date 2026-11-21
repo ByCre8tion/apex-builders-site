@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqGroups, contact } from '../data/site';
+---
+<Base title="FAQ | Apex Builders" description="Answers about pricing, timelines, design and licensing from Apex Builders." current="faq.html">
+  <PageHeader n="05" label="FAQ" title="Questions, answered" edit="faq-page" lead="The questions homeowners and business owners ask us most. Still unsure about something? Call us." />
+  <section class="section faq-page" aria-label="Questions" style="padding-top:0">
+    <div class="wrap faqp-grid">
+      <nav class="faqp-nav" aria-label="Question groups">
+        {faqGroups.map((g) => <a href={`#g-${g.title.toLowerCase().replace(/\s+/g, '-')}`}>{g.title}</a>)}
+        <a class="btn btn-primary" href={`tel:${contact.tel}`}>Call {contact.phone}</a>
+      </nav>
+      <div class="faqp-groups">
+        {faqGroups.map((g, gi) => (
+          <div class="faq-group" id={`g-${g.title.toLowerCase().replace(/\s+/g, '-')}`}>
+            <h2 class="faq-gh">{g.title}</h2>
+            <div class="faq-list">
+              {g.items.map((f, i) => (
+                <div class="qa">
+                  <h3 class="qa-h"><button type="button" aria-expanded="false" aria-controls={`fq-${gi}-${i}`} id={`fb-${gi}-${i}`}><span data-edit={`fq-${gi}-${i}-q`}>{f.q}</span><span class="pm" aria-hidden="true"></span></button></h3>
+                  <div class="qa-a" id={`fq-${gi}-${i}`} role="region" aria-labelledby={`fb-${gi}-${i}`}><div><p data-edit={`fq-${gi}-${i}-a`}>{f.a}</p></div></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand edit="faq-page-cta" title="Still have a question?" text="Call or send a quote request and we will walk you through it." />
+</Base>
+<style is:global>
+.faqp-grid{display:grid;grid-template-columns:minmax(0,.35fr) minmax(0,1fr);gap:clamp(32px,6vw,112px);align-items:start}
+.faqp-nav{position:sticky;top:104px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;border-top:1px solid var(--rule);padding-top:16px}
+.faqp-nav a:not(.btn){padding:8px 0;font-weight:500}
+.faqp-nav .btn{margin-top:20px}
+@media (hover:hover){ .faqp-nav a:not(.btn):hover{color:var(--ember)} }
+.faqp-groups{display:flex;flex-direction:column;gap:clamp(48px,6vw,88px)}
+.faq-gh{font-size:clamp(1.75rem,3vw,2.75rem);margin-bottom:18px}
+@media (max-width:900px){ .faqp-grid{grid-template-columns:minmax(0,1fr)} .faqp-nav{position:static;flex-direction:row;flex-wrap:wrap;gap:4px 20px} .faqp-nav .btn{display:none} }
+</style>
